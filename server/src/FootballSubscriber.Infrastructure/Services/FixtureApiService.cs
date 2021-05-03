@@ -45,7 +45,7 @@ namespace FootballSubscriber.Infrastructure.Services
             return competitions;
         }
 
-        public async Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetition(int competitionId)
+        public async Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetitionAsync(int competitionId)
         {
             var response = await _httpClient.GetAsync($"organisations?ids={competitionId}");
 
@@ -56,7 +56,7 @@ namespace FootballSubscriber.Infrastructure.Services
             return organisations;
         }
 
-        public async Task<GetFixturesResponseModel> GetFixturesForCompetition(int competitionId,
+        public async Task<GetFixturesResponseModel> GetFixturesForCompetitionAsync(int competitionId,
             IEnumerable<int> organisationIds)
         {
             var payload = new
