@@ -11,5 +11,20 @@ namespace FootballSubscriber.Core.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<CompetitionModel>> GetCompetitionsAsync();
+
+        /// <summary>
+        /// Gets the list of organisations involved in a competition from the auckland football API
+        /// </summary>
+        /// <param name="competitionId"></param>
+        /// <returns></returns>
+        Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetition(int competitionId);
+
+        /// <summary>
+        /// Gets the list of fixtures for a competition from the auckland football API
+        /// </summary>
+        /// <param name="competitionId"></param>
+        /// <param name="organisationIds"></param>
+        /// <returns></returns>
+        Task<GetFixturesResponseModel> GetFixturesForCompetition(int competitionId, IEnumerable<int> organisationIds);
     }
 }

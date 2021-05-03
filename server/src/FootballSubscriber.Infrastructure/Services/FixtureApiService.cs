@@ -44,5 +44,46 @@ namespace FootballSubscriber.Infrastructure.Services
             var competitions = JsonConvert.DeserializeObject<IEnumerable<CompetitionModel>>(content);
             return competitions;
         }
+
+        public async Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetition(int competitionId)
+        {
+            var response = await _httpClient.GetAsync($"organisations?ids={competitionId}");
+
+            if (!response.IsSuccessStatusCode) throw new SystemException("Could not get organisations for competition");
+
+            var content = await response.Content.ReadAsStringAsync();
+            var organisations = JsonConvert.DeserializeObject<IEnumerable<OrganisationModel>>(content);
+            return organisations;
+        }
+
+        public async Task<GetFixturesResponseModel> GetFixturesForCompetition(int competitionId,
+            IEnumerable<int> organisationIds)
+        {
+            var payload = new
+            {
+                competitionId = competitionId.ToString(),
+                from = DateTime.Now.AddYears(-1),
+                gradeId = "",
+                gradeIds = "",
+                orgIds = string.Join(",", organisationIds),
+                organisationId = "",
+                roundsOn = "False",
+                seasonId = _configuration["FixtureApi:SeasonId"],
+                to = DateTime.Now.AddYears(1)
+            };
+            var stringContent = new StringContent(
+                JsonConvert.SerializeObject(payload),
+                Encoding.UTF8,
+                MediaTypeNames.Application.Json);
+
+            var response = await _httpClient.PostAsync("filteredfixtures", stringContent);
+
+            if (!response.IsSuccessStatusCode) throw new SystemException("Could not get fixtures for competition");
+
+            var content = await response.Content.ReadAsStringAsync();
+            var fixtures = JsonConvert.DeserializeObject<GetFixturesResponseModel>(content);
+
+            return fixtures;
+        }
     }
 }
