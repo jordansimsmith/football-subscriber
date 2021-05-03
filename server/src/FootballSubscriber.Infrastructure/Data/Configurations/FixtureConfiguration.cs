@@ -9,8 +9,9 @@ namespace FootballSubscriber.Infrastructure.Data.Configurations
         public void Configure(EntityTypeBuilder<Fixture> builder)
         {
             builder.HasKey(o => o.Id);
-
             builder.HasIndex(o => o.ApiId).IsUnique();
+
+            builder.Property(o => o.CompetitionId).IsRequired();
 
             builder.Property(o => o.HomeTeamId).IsRequired();
             builder.Property(o => o.HomeTeamName).IsRequired();
