@@ -1,7 +1,12 @@
+using System;
+using System.Net.Http;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using FootballSubscriber.Core;
+using FootballSubscriber.Core.Interfaces;
 using FootballSubscriber.Infrastructure;
 using FootballSubscriber.Infrastructure.Data;
+using FootballSubscriber.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +35,7 @@ namespace FootballSubscriber.Api
             });
 
             services.AddDbContext(Configuration.GetConnectionString("FootballSubscriber"));
+            services.AddHttpClient<IFixtureApiService, FixtureApiService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

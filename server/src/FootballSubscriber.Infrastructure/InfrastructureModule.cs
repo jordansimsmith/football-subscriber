@@ -1,6 +1,7 @@
 using Autofac;
 using FootballSubscriber.Core.Interfaces;
 using FootballSubscriber.Infrastructure.Data;
+using FootballSubscriber.Infrastructure.Services;
 
 namespace FootballSubscriber.Infrastructure
 {
@@ -11,6 +12,11 @@ namespace FootballSubscriber.Infrastructure
             builder
                 .RegisterGeneric(typeof(Repository<>))
                 .As(typeof(IRepository<>))
+                .InstancePerLifetimeScope();
+
+            builder
+                .RegisterType<FixtureApiService>()
+                .As<IFixtureApiService>()
                 .InstancePerLifetimeScope();
         }
     }
