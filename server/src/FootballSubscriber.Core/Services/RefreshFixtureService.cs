@@ -13,8 +13,8 @@ namespace FootballSubscriber.Core.Services
     {
         private readonly IFixtureApiService _fixtureApiService;
         private readonly IRepository<Fixture> _fixtureRepository;
-        private readonly ILogger<RefreshFixtureService> _logger;
         private readonly IMapper _mapper;
+        private readonly ILogger<RefreshFixtureService> _logger;
 
         public RefreshFixtureService(
             IFixtureApiService fixtureApiService,
