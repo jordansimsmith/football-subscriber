@@ -1,9 +1,8 @@
-using System;
-using System.Net.Http;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using AutoMapper.Contrib.Autofac.DependencyInjection;
 using FootballSubscriber.Core;
 using FootballSubscriber.Core.Interfaces;
+using FootballSubscriber.Core.Mappers;
 using FootballSubscriber.Infrastructure;
 using FootballSubscriber.Infrastructure.Data;
 using FootballSubscriber.Infrastructure.Services;
@@ -42,6 +41,7 @@ namespace FootballSubscriber.Api
         {
             builder.RegisterModule<CoreModule>();
             builder.RegisterModule<InfrastructureModule>();
+            builder.RegisterAutoMapper(typeof(FixtureProfile).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,7 +61,7 @@ namespace FootballSubscriber.Api
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-            
+
             // TODO: use migrations
             using var scope = app.ApplicationServices.CreateScope();
             using var context = scope.ServiceProvider.GetService<FootballSubscriberContext>();

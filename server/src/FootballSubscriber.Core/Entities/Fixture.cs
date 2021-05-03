@@ -5,6 +5,7 @@ namespace FootballSubscriber.Core.Entities
     public class Fixture
     {
         public int Id { get; set; }
+        public int ApiId { get; set; }
         
         public int HomeTeamId {get; set; }
         public string HomeTeamName { get; set; }
