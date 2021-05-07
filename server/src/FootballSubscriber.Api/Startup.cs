@@ -71,6 +71,8 @@ namespace FootballSubscriber.Api
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FootballSubscriber.Api v1"));
+
+                app.UseHangfireDashboard();
             }
 
             app.UseHttpsRedirection();
@@ -80,11 +82,6 @@ namespace FootballSubscriber.Api
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            {
-                IsReadOnlyFunc = _ => true
-            });
 
             // TODO: use migrations
             using var scope = app.ApplicationServices.CreateScope();
