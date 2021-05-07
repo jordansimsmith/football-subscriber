@@ -1,3 +1,4 @@
+using System;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using FootballSubscriber.Core;
@@ -6,6 +7,8 @@ using FootballSubscriber.Core.Mappers;
 using FootballSubscriber.Infrastructure;
 using FootballSubscriber.Infrastructure.Data;
 using FootballSubscriber.Infrastructure.Services;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +39,21 @@ namespace FootballSubscriber.Api
 
             services.AddDbContext(Configuration.GetConnectionString("FootballSubscriber"));
             services.AddHttpClient<IFixtureApiService, FixtureApiService>();
+
+            services.AddHangfire(configuration =>
+            {
+                configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer().UseRecommendedSerializerSettings()
+                    .UseSqlServerStorage(Configuration.GetConnectionString("Hangfire"), new SqlServerStorageOptions
+                    {
+                        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                        QueuePollInterval = TimeSpan.Zero,
+                        UseRecommendedIsolationLevel = true,
+                        DisableGlobalLocks = true
+                    });
+            });
+            services.AddHangfireServer();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -63,10 +81,22 @@ namespace FootballSubscriber.Api
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                IsReadOnlyFunc = _ => true
+            });
+
             // TODO: use migrations
             using var scope = app.ApplicationServices.CreateScope();
             using var context = scope.ServiceProvider.GetService<FootballSubscriberContext>();
             context.Database.Migrate();
+
+            ConfigureRecurringJobs();
+        }
+
+        private void ConfigureRecurringJobs()
+        {
+            RecurringJob.AddOrUpdate<IRefreshFixtureService>(x => x.RefreshFixturesAsync(), "*/15 * * * *");
         }
     }
 }
