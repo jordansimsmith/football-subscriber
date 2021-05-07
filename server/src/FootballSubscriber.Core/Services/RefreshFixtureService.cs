@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,17 +14,20 @@ namespace FootballSubscriber.Core.Services
     {
         private readonly IFixtureApiService _fixtureApiService;
         private readonly IRepository<Fixture> _fixtureRepository;
+        private readonly IRepository<Competition> _competitionRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<RefreshFixtureService> _logger;
 
         public RefreshFixtureService(
             IFixtureApiService fixtureApiService,
             IRepository<Fixture> fixtureRepository,
+            IRepository<Competition> competitionRepository,
             IMapper mapper,
             ILogger<RefreshFixtureService> logger)
         {
             _fixtureApiService = fixtureApiService;
             _fixtureRepository = fixtureRepository;
+            _competitionRepository = competitionRepository;
             _mapper = mapper;
             _logger = logger;
         }
@@ -32,7 +36,8 @@ namespace FootballSubscriber.Core.Services
         {
             _logger.LogInformation("Refreshing fixtures");
 
-            var competitions = await _fixtureApiService.GetCompetitionsAsync();
+            var competitions = (await _fixtureApiService.GetCompetitionsAsync()).ToList();
+            await UpdateCompetitionsAsync(competitions.Select(c => _mapper.Map<CompetitionModel, Competition>(c)));
             _logger.LogInformation("Retrieved competitions");
 
             foreach (var competition in competitions)
@@ -46,10 +51,12 @@ namespace FootballSubscriber.Core.Services
 
                 var fixturesResponse =
                     await _fixtureApiService.GetFixturesForCompetitionAsync(competitionId, organisationIds);
+                var localCompetitions = await _competitionRepository.FindAsync(c => true, f => f.ApiId);
                 var fixtures = fixturesResponse.Fixtures.Select(f =>
                 {
                     var fixture = _mapper.Map<FixtureModel, Fixture>(f);
-                    fixture.CompetitionId = competitionId;
+                    fixture.CompetitionApiId = competitionId;
+                    fixture.Competition = localCompetitions.First(c => c.ApiId == competitionId);
                     return fixture;
                 });
 
@@ -57,9 +64,68 @@ namespace FootballSubscriber.Core.Services
             }
         }
 
+        private async Task UpdateCompetitionsAsync(IEnumerable<Competition> competitions)
+        {
+            var oldCompetitions = (await _competitionRepository.FindAsync(c => true, f => f.ApiId))
+                .ToList();
+            var newCompetitions = competitions.OrderBy(c => c.ApiId).ToList();
+            
+            var i = 0; // old competition counter
+            var j = 0; // new competition counter
+
+            // while there are remaining new and old competitions
+            while (i < oldCompetitions.Count && j < newCompetitions.Count)
+            {
+                // exists in both old and new - UPDATE
+                if (oldCompetitions[i].ApiId == newCompetitions[j].ApiId)
+                {
+                    oldCompetitions[i].Name = newCompetitions[j].Name;
+
+                    i++;
+                    j++;
+                    continue;
+                }
+
+                // exists in new but not in old - INSERT
+                if (oldCompetitions[i].ApiId > newCompetitions[j].ApiId)
+                {
+                    await _competitionRepository.AddAsync(newCompetitions[j]);
+
+                    j++;
+                    continue;
+                }
+
+                // exists in old but not in new - DELETE
+                if (oldCompetitions[i].ApiId < newCompetitions[j].ApiId)
+                {
+                    _competitionRepository.Remove(oldCompetitions[i]);
+
+                    i++;
+                }
+            }
+
+            // while there are remaining old competitions
+            while (i < oldCompetitions.Count)
+            {
+                _competitionRepository.Remove(oldCompetitions[i]);
+
+                i++;
+            }
+            
+            // while there are remaining new competitions
+            while (j < newCompetitions.Count)
+            {
+                await _competitionRepository.AddAsync(newCompetitions[j]);
+
+                j++;
+            }
+
+            await _competitionRepository.SaveChangesAsync();
+        }
+
         private async Task UpdateFixturesForCompetitionAsync(IEnumerable<Fixture> fixtures, int competitionId)
         {
-            var oldFixtures = (await _fixtureRepository.FindAsync(f => f.CompetitionId == competitionId, f => f.ApiId))
+            var oldFixtures = (await _fixtureRepository.FindAsync(f => f.CompetitionApiId == competitionId, f => f.ApiId))
                 .ToList();
             var newFixtures = fixtures.OrderBy(f => f.ApiId).ToList();
 
