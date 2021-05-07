@@ -11,7 +11,7 @@ namespace FootballSubscriber.Infrastructure.Data.Configurations
             builder.HasKey(o => o.Id);
             builder.HasIndex(o => o.ApiId).IsUnique();
 
-            builder.Property(o => o.CompetitionId).IsRequired();
+            builder.Property(o => o.CompetitionApiId).IsRequired();
 
             builder.Property(o => o.HomeTeamId).IsRequired();
             builder.Property(o => o.HomeTeamName).IsRequired();

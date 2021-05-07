@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace FootballSubscriber.Core.Entities
 {
@@ -17,7 +18,7 @@ namespace FootballSubscriber.Core.Entities
         /// <summary>
         ///     Set on save
         /// </summary>
-        public int CompetitionId { get; set; }
+        public int CompetitionApiId { get; set; }
 
         public int HomeTeamId { get; set; }
         public string HomeTeamName { get; set; }
@@ -33,5 +34,8 @@ namespace FootballSubscriber.Core.Entities
         public int VenueId { get; set; }
         public string VenueName { get; set; }
         public string Address { get; set; }
+        
+        public int CompetitionId { get; set; }
+        public Competition Competition { get; set; }
     }
 }
