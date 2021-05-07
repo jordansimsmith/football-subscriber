@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace FootballSubscriber.Core.Entities
 {
@@ -16,6 +17,6 @@ namespace FootballSubscriber.Core.Entities
 
         public string Name { get; set; }
 
-        public ICollection<Fixture> Fixtures { get; set; }
+        [JsonIgnore] public ICollection<Fixture> Fixtures { get; set; }
     }
 }

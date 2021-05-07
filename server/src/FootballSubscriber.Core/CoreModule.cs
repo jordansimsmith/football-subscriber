@@ -9,6 +9,8 @@ namespace FootballSubscriber.Core
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<RefreshFixtureService>().As<IRefreshFixtureService>().InstancePerLifetimeScope();
+            builder.RegisterType<CompetitionService>().As<ICompetitionService>().InstancePerLifetimeScope();
+            builder.RegisterType<FixtureService>().As<IFixtureService>().InstancePerLifetimeScope();
         }
     }
 }

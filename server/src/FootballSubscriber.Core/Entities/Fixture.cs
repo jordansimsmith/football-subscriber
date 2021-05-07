@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace FootballSubscriber.Core.Entities
 {
@@ -34,8 +35,8 @@ namespace FootballSubscriber.Core.Entities
         public int VenueId { get; set; }
         public string VenueName { get; set; }
         public string Address { get; set; }
-        
+
         public int CompetitionId { get; set; }
-        public Competition Competition { get; set; }
+        [JsonIgnore] public Competition Competition { get; set; }
     }
 }
