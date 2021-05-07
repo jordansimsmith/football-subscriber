@@ -17,7 +17,7 @@ namespace FootballSubscriber.Api.Controllers
         }
 
         [HttpGet]
-        [Route("fixtures")]
+        [Route("")]
         public async Task<ActionResult> GetFixturesAsync(int competitionId, DateTime fromDate, DateTime toDate)
         {
             return Ok(await _fixtureService.GetFixturesAsync(competitionId, fromDate, toDate));

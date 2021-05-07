@@ -16,7 +16,7 @@ namespace FootballSubscriber.Api.Controllers
         }
 
         [HttpGet]
-        [Route("competitions")]
+        [Route("")]
         public async Task<ActionResult> GetCompetitionsAsync()
         {
             return Ok(await _competitionService.GetCompetitionsAsync());
