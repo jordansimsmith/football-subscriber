@@ -8,6 +8,7 @@ using FootballSubscriber.Infrastructure.Data;
 using FootballSubscriber.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -65,7 +66,7 @@ namespace FootballSubscriber.Api
             // TODO: use migrations
             using var scope = app.ApplicationServices.CreateScope();
             using var context = scope.ServiceProvider.GetService<FootballSubscriberContext>();
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
         }
     }
 }
