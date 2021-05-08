@@ -37,6 +37,17 @@ namespace FootballSubscriber.Api
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "FootballSubscriber.Api", Version = "v1"});
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithExposedHeaders("location")
+                    );
+            });
+
             services.AddDbContext(Configuration.GetConnectionString("FootballSubscriber"));
             services.AddHttpClient<IFixtureApiService, FixtureApiService>();
 
@@ -74,12 +85,9 @@ namespace FootballSubscriber.Api
 
                 app.UseHangfireDashboard();
             }
-
-            app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
