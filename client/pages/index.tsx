@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
+import { CompetitionSelect } from '../components/CompetitionSelect';
 
 const Index: NextPage = () => {
   return (
@@ -15,6 +16,8 @@ const Index: NextPage = () => {
 
       <main>
         <h1>Football Subscriber</h1>
+
+        <CompetitionSelect />
       </main>
 
       <footer>Jordan Sim-Smith</footer>

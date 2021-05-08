@@ -10,6 +10,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/ban-types': 'off',
   },
   globals: {
     React: 'writable',
