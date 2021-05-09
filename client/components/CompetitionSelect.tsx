@@ -53,6 +53,14 @@ export const CompetitionSelect: React.FC<CompetitionSelectProps> = ({
           primary25: theme.colors.teal['50'],
         },
       })}
+      styles={{
+        control: (provided, state) => ({
+          ...provided,
+          borderColor: state.isFocused
+            ? provided.borderColor
+            : theme.colors.gray['200'],
+        }),
+      }}
     />
   );
 };
