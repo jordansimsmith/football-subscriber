@@ -33,7 +33,7 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
   onToDateChange,
 }) => {
   const { data, isLoading } = useQuery<IFixture[]>(
-    ['fixtures', competitionId, fromDate, toDate],
+    ['fixtures', competitionId, fromDate.toDateString(), toDate.toDateString()],
     async () => {
       if (!competitionId) {
         return [];
@@ -51,10 +51,21 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
       const data = await res.json();
       return data;
     },
-    { initialData: [] },
   );
 
   const fixtureRows = React.useMemo(() => {
+    if (!data?.length) {
+      return (
+        <Tr>
+          <Td colSpan={4}>
+            <Center>
+              No fixtures available for the current competition and round.
+            </Center>
+          </Td>
+        </Tr>
+      );
+    }
+
     return data.map((f) => <FixtureRow key={f.id} fixture={f} />);
   }, [data]);
 
@@ -83,7 +94,11 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
   };
 
   if (isLoading) {
-    return <Spinner />;
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
   }
 
   return (
@@ -101,19 +116,7 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
         </Tr>
       </Thead>
 
-      <Tbody>
-        {fixtureRows.length ? (
-          fixtureRows
-        ) : (
-          <Tr>
-            <Td colSpan={4}>
-              <Center>
-                No fixtures available for the current competition and round.
-              </Center>
-            </Td>
-          </Tr>
-        )}
-      </Tbody>
+      <Tbody>{fixtureRows}</Tbody>
 
       <Tfoot>
         <Tr>
@@ -121,15 +124,21 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
             <Center>
               <ButtonGroup>
                 <Button
+                  disabled={!competitionId}
                   leftIcon={<ArrowLeftIcon />}
                   onClick={handlePreviousRound}
                 >
                   Previous Round
                 </Button>
-                <Button leftIcon={<RepeatIcon />} onClick={handleResetRound}>
+                <Button
+                  leftIcon={<RepeatIcon />}
+                  onClick={handleResetRound}
+                  disabled={!competitionId}
+                >
                   Reset
                 </Button>
                 <Button
+                  disabled={!competitionId}
                   rightIcon={<ArrowRightIcon />}
                   onClick={handleNextRound}
                 >

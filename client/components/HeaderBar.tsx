@@ -3,7 +3,7 @@ import React from 'react';
 
 export const HeaderBar: React.FC<{}> = () => {
   return (
-    <Box backgroundColor="aquamarine" padding="10px">
+    <Box backgroundColor="teal.100" padding="10px">
       <Container maxW="container.xl">
         <Flex justifyContent="space-between">
           <Heading>Football Subscriber</Heading>

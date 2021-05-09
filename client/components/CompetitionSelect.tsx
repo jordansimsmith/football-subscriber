@@ -1,47 +1,58 @@
-import { Select } from '@chakra-ui/select';
 import React from 'react';
+import Select from 'react-select';
 import { useQuery } from 'react-query';
-import { ICompetition } from '../types/types';
+import { ICompetition, IOption } from '../types/types';
+import { useTheme } from '@chakra-ui/system';
 
 interface CompetitionSelectProps {
-  value: number;
-  onChange: (competitionId: number) => void;
+  value: IOption;
+  onChange: (option: IOption) => void;
 }
 
 export const CompetitionSelect: React.FC<CompetitionSelectProps> = ({
   value,
   onChange,
 }) => {
-  const { data } = useQuery<ICompetition[]>(
+  const { data, isLoading } = useQuery<ICompetition[]>(
     'competitions',
     async () => {
       const res = await fetch('http://localhost:5000/competitions');
       const data = await res.json();
       return data;
     },
-    { initialData: [] },
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const competitionId = Number(e.target.value);
-    onChange(competitionId);
-  };
-
   const options = React.useMemo(() => {
-    return data.map((o) => (
-      <option value={o.id} key={o.id}>
-        {o.name}
-      </option>
-    ));
+    if (!data) {
+      return [];
+    }
+
+    return data.map((o) => ({
+      value: o.id,
+      label: o.name,
+    }));
   }, [data]);
+
+  const theme = useTheme();
 
   return (
     <Select
       placeholder="Select a competition"
-      value={value ?? ''}
-      onChange={handleChange}
-    >
-      {options}
-    </Select>
+      value={value}
+      onChange={onChange}
+      options={options}
+      isLoading={isLoading}
+      instanceId="competition-select"
+      theme={(t) => ({
+        ...t,
+        colors: {
+          ...t.colors,
+          primary: theme.colors.teal['300'],
+          primary75: theme.colors.teal['200'],
+          primary50: theme.colors.teal['100'],
+          primary25: theme.colors.teal['50'],
+        },
+      })}
+    />
   );
 };

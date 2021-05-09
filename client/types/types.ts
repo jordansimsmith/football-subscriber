@@ -19,3 +19,8 @@ export interface IFixture {
   venueId: number;
   venueName: string;
 }
+
+export interface IOption {
+  label: string;
+  value: number;
+}

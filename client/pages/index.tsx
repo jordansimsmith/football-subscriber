@@ -4,9 +4,10 @@ import Head from 'next/head';
 import { CompetitionSelect } from '../components/CompetitionSelect';
 import { FixturesTable } from '../components/FixturesTable';
 import { Box, Container, Divider, Heading } from '@chakra-ui/layout';
+import { IOption } from '../types/types';
 
 const Index: NextPage = () => {
-  const [competitionId, setCompetitionId] = React.useState<number>(null);
+  const [competition, setCompetition] = React.useState<IOption>();
   const [fromDate, setFromDate] = React.useState<Date>(new Date());
   const [toDate, setToDate] = React.useState<Date>(() => {
     const date = new Date();
@@ -38,10 +39,7 @@ const Index: NextPage = () => {
             Competition
           </Heading>
           <Divider marginY="15px" />
-          <CompetitionSelect
-            value={competitionId}
-            onChange={setCompetitionId}
-          />
+          <CompetitionSelect value={competition} onChange={setCompetition} />
         </Box>
 
         <Box
@@ -54,7 +52,7 @@ const Index: NextPage = () => {
           background="white"
         >
           <FixturesTable
-            competitionId={competitionId}
+            competitionId={competition?.value}
             fromDate={fromDate}
             toDate={toDate}
             onFromDateChange={setFromDate}
