@@ -142,10 +142,39 @@ namespace FootballSubscriber.Test.Core
                 .ReturnsAsync(Enumerable.Empty<Fixture>())
                 .Verifiable();
 
+            var teams = new[]
+            {
+                new Team
+                {
+                    ApiId = 11,
+                    Name = "Team 11"
+                },
+                new Team
+                {
+                    ApiId = 21,
+                    Name = "Team 21"
+                },
+                new Team
+                {
+                    ApiId = 31,
+                    Name = "Team 31"
+                },
+                new Team
+                {
+                    ApiId = 41,
+                    Name = "Team 41"
+                },
+                new Team
+                {
+                    ApiId = 51,
+                    Name = "Team 1"
+                }
+            };
+
             _mockTeamRepository
                 .Setup(x => x.FindAsync(It.IsAny<Expression<Func<Team, bool>>>(),
                     It.IsAny<Expression<Func<Team, object>>>()))
-                .ReturnsAsync(Enumerable.Empty<Team>())
+                .ReturnsAsync(teams)
                 .Verifiable();
 
             var localCompetitions = new[]
