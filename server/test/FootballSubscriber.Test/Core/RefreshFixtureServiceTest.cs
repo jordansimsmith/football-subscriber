@@ -23,6 +23,8 @@ namespace FootballSubscriber.Test.Core
         private readonly Mock<IMerger<Fixture>> _mockFixtureMerger;
         private readonly Mock<IRepository<Fixture>> _mockFixtureRepository;
         private readonly Mock<ILogger<RefreshFixtureService>> _mockLogger;
+        private readonly Mock<IMerger<Team>> _mockTeamMerger;
+        private readonly Mock<IRepository<Team>> _mockTeamRepository;
 
         private readonly RefreshFixtureService _subject;
 
@@ -34,6 +36,8 @@ namespace FootballSubscriber.Test.Core
             _mockFixtureMerger = new Mock<IMerger<Fixture>>();
             _mockCompetitionMerger = new Mock<IMerger<Competition>>();
             _mockLogger = new Mock<ILogger<RefreshFixtureService>>();
+            _mockTeamRepository = new Mock<IRepository<Team>>();
+            _mockTeamMerger = new Mock<IMerger<Team>>();
 
             var mapperConfig = new MapperConfiguration(cfg =>
             {
@@ -49,7 +53,10 @@ namespace FootballSubscriber.Test.Core
                 _mockFixtureMerger.Object,
                 _mockCompetitionMerger.Object,
                 mapper,
-                _mockLogger.Object);
+                _mockLogger.Object,
+                _mockTeamRepository.Object,
+                _mockTeamMerger.Object
+            );
         }
 
         [Fact]
@@ -96,17 +103,29 @@ namespace FootballSubscriber.Test.Core
                     new FixtureModel
                     {
                         Id = "1",
-                        Address = "Field 1"
+                        Address = "Field 1",
+                        HomeTeamId = "21",
+                        HomeTeamName = "Team 21",
+                        AwayTeamId = "31",
+                        AwayTeamName = "Team 31"
                     },
                     new FixtureModel
                     {
                         Id = "2",
-                        Address = "Field 2"
+                        Address = "Field 2",
+                        HomeTeamId = "41",
+                        HomeTeamName = "Team 41",
+                        AwayTeamId = "31",
+                        AwayTeamName = "Team 31"
                     },
                     new FixtureModel
                     {
                         Id = "3",
-                        Address = "Field 3"
+                        Address = "Field 3",
+                        HomeTeamId = "11",
+                        HomeTeamName = "Team 11",
+                        AwayTeamId = "51",
+                        AwayTeamName = "Team 51"
                     }
                 },
                 LastResultDate = DateTime.Now,
@@ -121,6 +140,12 @@ namespace FootballSubscriber.Test.Core
                 .Setup(x => x.FindAsync(It.IsAny<Expression<Func<Fixture, bool>>>(),
                     It.IsAny<Expression<Func<Fixture, object>>>()))
                 .ReturnsAsync(Enumerable.Empty<Fixture>())
+                .Verifiable();
+
+            _mockTeamRepository
+                .Setup(x => x.FindAsync(It.IsAny<Expression<Func<Team, bool>>>(),
+                    It.IsAny<Expression<Func<Team, object>>>()))
+                .ReturnsAsync(Enumerable.Empty<Team>())
                 .Verifiable();
 
             var localCompetitions = new[]
@@ -146,6 +171,8 @@ namespace FootballSubscriber.Test.Core
                 x => x.MergeAsync(It.IsAny<IList<Competition>>(), It.IsAny<IList<Competition>>()), Times.Once);
             _mockFixtureMerger.Verify(x => x.MergeAsync(It.IsAny<IList<Fixture>>(), It.IsAny<IList<Fixture>>()),
                 Times.Once);
+            _mockTeamMerger.Verify(x =>
+                x.MergeAsync(It.IsAny<IList<Team>>(), It.Is<IList<Team>>(t => t.Count == 5)), Times.Once);
 
             _mockFixtureApiService.Verify();
             _mockCompetitionRepository.Verify();
