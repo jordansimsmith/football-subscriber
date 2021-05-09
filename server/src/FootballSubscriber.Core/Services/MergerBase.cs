@@ -34,7 +34,7 @@ namespace FootballSubscriber.Core.Services
                 }
 
                 // exists in old but not in new - DELETE
-                if (GetEntityComparableKey(oldEntities[i]) > GetEntityComparableKey(newEntities[j]))
+                if (GetEntityComparableKey(oldEntities[i]) < GetEntityComparableKey(newEntities[j]))
                 {
                     await RemoveEntityAsync(oldEntities[i]);
 
@@ -53,7 +53,7 @@ namespace FootballSubscriber.Core.Services
             // while there are remaining new entities
             while (j < newEntities.Count)
             {
-                await InsertEntityAsync(newEntities[i]);
+                await InsertEntityAsync(newEntities[j]);
 
                 j++;
             }
