@@ -105,7 +105,7 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
           fixtureRows
         ) : (
           <Tr>
-            <Td colSpan="4">
+            <Td colSpan={4}>
               <Center>
                 No fixtures available for the current competition and round.
               </Center>
@@ -116,7 +116,7 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
 
       <Tfoot>
         <Tr>
-          <Td colspan="4">
+          <Td colSpan={4}>
             <Center>
               <ButtonGroup>
                 <Button

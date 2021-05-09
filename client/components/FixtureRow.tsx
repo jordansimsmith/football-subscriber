@@ -1,4 +1,4 @@
-import { Image, Wrap, WrapItem } from '@chakra-ui/react';
+import { Image, Tooltip, Wrap, WrapItem } from '@chakra-ui/react';
 import { Tr, Td } from '@chakra-ui/table';
 import React from 'react';
 
@@ -36,7 +36,9 @@ export const FixtureRow: React.FC<FixtureRowProps> = ({ fixture }) => {
         </Wrap>
       </Td>
       <Td>{new Date(fixture.date).toLocaleString()}</Td>
-      <Td>{fixture.venueName}</Td>
+      <Td>
+        <Tooltip label={fixture.address}>{fixture.venueName}</Tooltip>
+      </Td>
     </Tr>
   );
 };
