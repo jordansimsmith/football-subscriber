@@ -11,7 +11,9 @@ namespace FootballSubscriber.Core.Mappers
             // set the third party Id as ApiId
             CreateMap<FixtureModel, Fixture>()
                 .ForMember(o => o.Id, cfg => cfg.Ignore())
-                .ForMember(o => o.ApiId, cfg => cfg.MapFrom(o => o.Id));
+                .ForMember(o => o.ApiId, cfg => cfg.MapFrom(o => o.Id))
+                .ForMember(o => o.HomeTeamApiId, cfg => cfg.MapFrom(o => o.HomeTeamId))
+                .ForMember(o => o.AwayTeamApiId, cfg => cfg.MapFrom(o => o.AwayTeamId));
         }
     }
 }
