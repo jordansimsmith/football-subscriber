@@ -1,9 +1,10 @@
 import { Flex, Image, Tooltip, Wrap, WrapItem } from '@chakra-ui/react';
 import { Tr, Td } from '@chakra-ui/table';
 import React from 'react';
+import { IFixture } from '../types/types';
 
 interface FixtureRowProps {
-  fixture: any;
+  fixture: IFixture;
 }
 
 export const FixtureRow: React.FC<FixtureRowProps> = ({ fixture }) => {

@@ -1,6 +1,7 @@
 import { Select } from '@chakra-ui/select';
 import React from 'react';
 import { useQuery } from 'react-query';
+import { ICompetition } from '../types/types';
 
 interface CompetitionSelectProps {
   value: number;
@@ -11,7 +12,7 @@ export const CompetitionSelect: React.FC<CompetitionSelectProps> = ({
   value,
   onChange,
 }) => {
-  const { data } = useQuery(
+  const { data } = useQuery<ICompetition[]>(
     'competitions',
     async () => {
       const res = await fetch('http://localhost:5000/competitions');

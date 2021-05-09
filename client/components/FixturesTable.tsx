@@ -1,6 +1,6 @@
 import { Button, ButtonGroup } from '@chakra-ui/button';
 import { ArrowLeftIcon, ArrowRightIcon, RepeatIcon } from '@chakra-ui/icons';
-import { Box, Center, Wrap } from '@chakra-ui/layout';
+import { Center } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import {
   Table,
@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/table';
 import React from 'react';
 import { useQuery } from 'react-query';
+import { IFixture } from '../types/types';
 import { FixtureRow } from './FixtureRow';
 
 interface FixturesTableProps {
@@ -31,7 +32,7 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
   onFromDateChange,
   onToDateChange,
 }) => {
-  const { data, isLoading } = useQuery(
+  const { data, isLoading } = useQuery<IFixture[]>(
     ['fixtures', competitionId, fromDate, toDate],
     async () => {
       if (!competitionId) {
