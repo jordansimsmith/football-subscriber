@@ -1,5 +1,17 @@
+import { Button, ButtonGroup } from '@chakra-ui/button';
+import { ArrowLeftIcon, ArrowRightIcon, RepeatIcon } from '@chakra-ui/icons';
+import { Box, Center, Wrap } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
-import { Table, TableCaption, Tbody, Th, Thead, Tr } from '@chakra-ui/table';
+import {
+  Table,
+  TableCaption,
+  Tbody,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+  Td,
+} from '@chakra-ui/table';
 import React from 'react';
 import { useQuery } from 'react-query';
 import { FixtureRow } from './FixtureRow';
@@ -8,12 +20,16 @@ interface FixturesTableProps {
   competitionId?: number;
   fromDate: Date;
   toDate: Date;
+  onFromDateChange: (date: Date) => void;
+  onToDateChange: (date: Date) => void;
 }
 
 export const FixturesTable: React.FC<FixturesTableProps> = ({
   competitionId,
   fromDate,
   toDate,
+  onFromDateChange,
+  onToDateChange,
 }) => {
   const { data, isLoading } = useQuery(
     ['fixtures', competitionId, fromDate, toDate],
@@ -37,13 +53,37 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
     { initialData: [] },
   );
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
   const fixtureRows = React.useMemo(() => {
     return data.map((f) => <FixtureRow key={f.id} fixture={f} />);
   }, [data]);
+
+  const handleDateChange = (dateChange: number) => () => {
+    const newFromDate = new Date(fromDate);
+    const newToDate = new Date(toDate);
+
+    newFromDate.setDate(newFromDate.getDate() + dateChange);
+    newToDate.setDate(newToDate.getDate() + dateChange);
+
+    onFromDateChange(newFromDate);
+    onToDateChange(newToDate);
+  };
+
+  const handlePreviousRound = handleDateChange(-7);
+  const handleNextRound = handleDateChange(7);
+
+  const handleResetRound = () => {
+    const newFromDate = new Date();
+    const newToDate = new Date();
+
+    newToDate.setDate(newToDate.getDate() + 7);
+
+    onFromDateChange(newFromDate);
+    onToDateChange(newToDate);
+  };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <Table variant="simple">
@@ -60,7 +100,45 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
         </Tr>
       </Thead>
 
-      <Tbody>{fixtureRows}</Tbody>
+      <Tbody>
+        {fixtureRows.length ? (
+          fixtureRows
+        ) : (
+          <Tr>
+            <Td colSpan="4">
+              <Center>
+                No fixtures available for the current competition and round.
+              </Center>
+            </Td>
+          </Tr>
+        )}
+      </Tbody>
+
+      <Tfoot>
+        <Tr>
+          <Td colspan="4">
+            <Center>
+              <ButtonGroup>
+                <Button
+                  leftIcon={<ArrowLeftIcon />}
+                  onClick={handlePreviousRound}
+                >
+                  Previous Round
+                </Button>
+                <Button leftIcon={<RepeatIcon />} onClick={handleResetRound}>
+                  Reset
+                </Button>
+                <Button
+                  rightIcon={<ArrowRightIcon />}
+                  onClick={handleNextRound}
+                >
+                  Next Round
+                </Button>
+              </ButtonGroup>
+            </Center>
+          </Td>
+        </Tr>
+      </Tfoot>
     </Table>
   );
 };

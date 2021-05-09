@@ -1,15 +1,14 @@
-import { useState } from 'react';
+import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { CompetitionSelect } from '../components/CompetitionSelect';
 import { FixturesTable } from '../components/FixturesTable';
 import { Box } from '@chakra-ui/layout';
-import { Fade } from '@chakra-ui/transition';
 
 const Index: NextPage = () => {
-  const [competitionId, setCompetitionId] = useState<number>(null);
-  const [fromDate, setFromDate] = useState<Date>(new Date());
-  const [toDate, setToDate] = useState<Date>(() => {
+  const [competitionId, setCompetitionId] = React.useState<number>(null);
+  const [fromDate, setFromDate] = React.useState<Date>(new Date());
+  const [toDate, setToDate] = React.useState<Date>(() => {
     const date = new Date();
     date.setDate(date.getDate() + 7);
     return date;
@@ -53,6 +52,8 @@ const Index: NextPage = () => {
             competitionId={competitionId}
             fromDate={fromDate}
             toDate={toDate}
+            onFromDateChange={setFromDate}
+            onToDateChange={setToDate}
           />
         </Box>
       </main>
