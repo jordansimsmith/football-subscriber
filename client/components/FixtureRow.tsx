@@ -1,4 +1,4 @@
-import { Image, Tooltip, Wrap, WrapItem } from '@chakra-ui/react';
+import { Flex, Image, Tooltip, Wrap, WrapItem } from '@chakra-ui/react';
 import { Tr, Td } from '@chakra-ui/table';
 import React from 'react';
 
@@ -10,30 +10,34 @@ export const FixtureRow: React.FC<FixtureRowProps> = ({ fixture }) => {
   return (
     <Tr>
       <Td>
-        <Wrap>
-          <WrapItem>
-            <Image
-              src={fixture.homeOrganisationLogo}
-              alt="Home team logo"
-              boxSize="40px"
-              objectFit="contain"
-            />
-          </WrapItem>
-          <WrapItem>{fixture.homeTeamName}</WrapItem>
-        </Wrap>
+        <Flex>
+          <Wrap>
+            <WrapItem>
+              <Image
+                src={fixture.homeOrganisationLogo}
+                alt="Home team logo"
+                boxSize="40px"
+                objectFit="contain"
+              />
+            </WrapItem>
+            <WrapItem alignItems="center">{fixture.homeTeamName}</WrapItem>
+          </Wrap>
+        </Flex>
       </Td>
       <Td>
-        <Wrap>
-          <WrapItem>
-            <Image
-              src={fixture.awayOrganisationLogo}
-              alt="Away team logo"
-              boxSize="40px"
-              objectFit="contain"
-            />
-          </WrapItem>
-          <WrapItem>{fixture.awayTeamName}</WrapItem>
-        </Wrap>
+        <Flex>
+          <Wrap>
+            <WrapItem>
+              <Image
+                src={fixture.awayOrganisationLogo}
+                alt="Away team logo"
+                boxSize="40px"
+                objectFit="contain"
+              />
+            </WrapItem>
+            <WrapItem alignItems="center">{fixture.awayTeamName}</WrapItem>
+          </Wrap>
+        </Flex>
       </Td>
       <Td>{new Date(fixture.date).toLocaleString()}</Td>
       <Td>

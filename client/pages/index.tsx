@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { CompetitionSelect } from '../components/CompetitionSelect';
 import { FixturesTable } from '../components/FixturesTable';
-import { Box } from '@chakra-ui/layout';
+import { Box, Container, Divider, Heading } from '@chakra-ui/layout';
 
 const Index: NextPage = () => {
   const [competitionId, setCompetitionId] = React.useState<number>(null);
@@ -15,7 +15,7 @@ const Index: NextPage = () => {
   });
 
   return (
-    <div>
+    <Box height="full" bg="gray.50">
       <Head>
         <title>Football Subscriber</title>
         <meta
@@ -25,16 +25,19 @@ const Index: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>Football Subscriber</h1>
-
+      <Container maxW="container.xl">
         <Box
           border="1px"
           borderColor="gray.200"
           padding="20px"
           borderRadius="md"
           marginY="20px"
+          background="white"
         >
+          <Heading as="h3" size="md">
+            Competition
+          </Heading>
+          <Divider marginY="15px" />
           <CompetitionSelect
             value={competitionId}
             onChange={setCompetitionId}
@@ -47,6 +50,8 @@ const Index: NextPage = () => {
           padding="20px"
           borderRadius="md"
           marginY="20px"
+          overflowX="auto"
+          background="white"
         >
           <FixturesTable
             competitionId={competitionId}
@@ -56,10 +61,8 @@ const Index: NextPage = () => {
             onToDateChange={setToDate}
           />
         </Box>
-      </main>
-
-      <footer>Jordan Sim-Smith</footer>
-    </div>
+      </Container>
+    </Box>
   );
 };
 
