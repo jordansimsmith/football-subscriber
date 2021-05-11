@@ -1,9 +1,9 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FootballSubscriber.Core.Entities;
-using FootballSubscriber.Core.Helpers;
 using FootballSubscriber.Core.Interfaces;
 using FootballSubscriber.Core.Models;
 using Microsoft.Extensions.Logging;
@@ -48,63 +48,77 @@ namespace FootballSubscriber.Core.Services
         {
             _logger.LogInformation("Refreshing fixtures");
 
+            // get competitions from API
             var newCompetitions = (await _fixtureApiService.GetCompetitionsAsync()).ToList();
             await UpdateCompetitionsAsync(newCompetitions.Select(c => _mapper.Map<CompetitionModel, Competition>(c)));
+            var localCompetitions = await _competitionRepository.FindAsync(c => true, f => f.ApiId);
             _logger.LogInformation("Retrieved competitions");
 
-            var newTeams = new HashSet<Team>(new ApiEntityComparer());
-            var newFixtures = new Dictionary<int, IList<Fixture>>();
+            // key: ApiId, value: Team
+            var newTeams = new ConcurrentDictionary<int, Team>();
+            // key: competitionId, value: List of fixtures
+            var newFixtures = new ConcurrentDictionary<int, IList<Fixture>>();
 
-            foreach (var competition in newCompetitions)
-            {
-                _logger.LogInformation($"Processing competition {competition.Name}");
+            // get fixtures in parallel
+            await Task.WhenAll(
+                newCompetitions.Select(c => GetFixturesAsync(c, localCompetitions, newTeams, newFixtures)));
 
-                var competitionId = int.Parse(competition.Id);
-                var organisations = await _fixtureApiService.GetOrganisationsForCompetitionAsync(competitionId);
-
-                var organisationIds = organisations.Select(o => int.Parse(o.Id));
-
-                var fixturesResponse =
-                    await _fixtureApiService.GetFixturesForCompetitionAsync(competitionId, organisationIds);
-                var localCompetitions = await _competitionRepository.FindAsync(c => true, f => f.ApiId);
-                var fixtures = fixturesResponse.Fixtures.Select(f =>
-                {
-                    var fixture = _mapper.Map<FixtureModel, Fixture>(f);
-                    fixture.CompetitionApiId = competitionId;
-                    fixture.Competition = localCompetitions.First(c => c.ApiId == competitionId);
-                    return fixture;
-                }).ToList();
-
-                foreach (var fixture in fixtures)
-                {
-                    newTeams.Add(new Team
-                    {
-                        ApiId = fixture.HomeTeamId,
-                        Name = fixture.HomeTeamName
-                    });
-                    newTeams.Add(new Team
-                    {
-                        ApiId = fixture.AwayTeamId,
-                        Name = fixture.AwayTeamName
-                    });
-                }
-
-                newFixtures[competitionId] = fixtures;
-            }
-
-            await UpdateTeamsAsync(newTeams);
+            // ensure database has up to date teams
+            await UpdateTeamsAsync(newTeams.Values);
             var localTeams = (await _teamRepository.FindAsync(t => true, t => t.ApiId)).ToList();
-            
+
+            // set relationships between teams and fixtures
             foreach (var (competitionId, fixtures) in newFixtures)
             {
                 foreach (var fixture in fixtures)
                 {
                     fixture.HomeTeam = localTeams.First(t => t.ApiId == fixture.HomeTeamApiId);
-                    fixture.AwayTeam = localTeams.First(t => t.ApiId == fixture.HomeTeamApiId);
+                    fixture.AwayTeam = localTeams.First(t => t.ApiId == fixture.AwayTeamApiId);
                 }
 
                 await UpdateFixturesForCompetitionAsync(fixtures, competitionId);
             }
+        }
+
+        private async Task GetFixturesAsync(CompetitionModel competition, IEnumerable<Competition> localCompetitions,
+            ConcurrentDictionary<int, Team> newTeams,
+            ConcurrentDictionary<int, IList<Fixture>> newFixtures)
+        {
+            _logger.LogInformation($"Processing competition {competition.Name}");
+
+            // get organisations for the competition from the API
+            var competitionId = int.Parse(competition.Id);
+            var organisations = await _fixtureApiService.GetOrganisationsForCompetitionAsync(competitionId);
+            var organisationIds = organisations.Select(o => int.Parse(o.Id));
+
+            // get fixtures for the competition from the API
+            var fixturesResponse =
+                await _fixtureApiService.GetFixturesForCompetitionAsync(competitionId, organisationIds);
+            var fixtures = fixturesResponse.Fixtures.Select(f =>
+            {
+                var fixture = _mapper.Map<FixtureModel, Fixture>(f);
+                fixture.CompetitionApiId = competitionId;
+                fixture.Competition = localCompetitions.First(c => c.ApiId == competitionId);
+                return fixture;
+            }).ToList();
+
+            // extract teams from the fixture information
+            foreach (var fixture in fixtures)
+            {
+                newTeams[fixture.HomeTeamApiId] = new Team
+                {
+                    ApiId = fixture.HomeTeamApiId,
+                    Name = fixture.HomeTeamName
+                };
+
+                newTeams[fixture.AwayTeamApiId] = new Team
+                {
+                    ApiId = fixture.AwayTeamApiId,
+                    Name = fixture.AwayTeamName
+                };
+            }
+
+            newFixtures[competitionId] = fixtures;
         }
 
         private async Task UpdateCompetitionsAsync(IEnumerable<Competition> competitions)

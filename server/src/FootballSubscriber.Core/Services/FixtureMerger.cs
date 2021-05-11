@@ -21,15 +21,21 @@ namespace FootballSubscriber.Core.Services
         protected override Task UpdateEntityAsync(Fixture oldEntity, Fixture newEntity)
         {
             // TODO: notify subscribers that fixtures have been updated
+            oldEntity.CompetitionApiId = oldEntity.CompetitionApiId;
+            oldEntity.Competition = oldEntity.Competition;
 
-            oldEntity.HomeTeamId = newEntity.HomeTeamId;
+            oldEntity.HomeTeamApiId = newEntity.HomeTeamApiId;
             oldEntity.HomeTeamName = newEntity.HomeTeamName;
+            oldEntity.HomeTeam = newEntity.HomeTeam;
             oldEntity.HomeOrganisationId = newEntity.HomeOrganisationId;
             oldEntity.HomeOrganisationLogo = newEntity.HomeOrganisationLogo;
-            oldEntity.AwayTeamId = newEntity.AwayTeamId;
+
+            oldEntity.AwayTeamApiId = newEntity.HomeTeamApiId;
             oldEntity.AwayTeamName = newEntity.AwayTeamName;
+            oldEntity.AwayTeam = newEntity.AwayTeam;
             oldEntity.AwayOrganisationId = newEntity.AwayOrganisationId;
             oldEntity.AwayOrganisationLogo = newEntity.AwayOrganisationLogo;
+            
             oldEntity.Date = newEntity.Date;
             oldEntity.VenueId = newEntity.VenueId;
             oldEntity.VenueName = newEntity.VenueName;
