@@ -3,10 +3,19 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { CompetitionSelect } from '../components/CompetitionSelect';
 import { FixturesTable } from '../components/FixturesTable';
-import { Box, Container, Divider, Heading } from '@chakra-ui/layout';
+import {
+  Box,
+  Center,
+  Container,
+  Divider,
+  Heading,
+  Link,
+  Text,
+} from '@chakra-ui/layout';
 import { IOption } from '../types/types';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
 import { useUser } from '@auth0/nextjs-auth0';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const Index: NextPage = () => {
   const [competition, setCompetition] = React.useState<IOption>();
@@ -37,7 +46,6 @@ const Index: NextPage = () => {
             Log in to be notified when your team's fixtures change.
           </Alert>
         )}
-
         <Box
           border="1px"
           borderColor="gray.200"
@@ -52,7 +60,6 @@ const Index: NextPage = () => {
           <Divider marginY="15px" />
           <CompetitionSelect value={competition} onChange={setCompetition} />
         </Box>
-
         <Box
           border="1px"
           borderColor="gray.200"
@@ -70,6 +77,16 @@ const Index: NextPage = () => {
             onToDateChange={setToDate}
           />
         </Box>
+        <Center color="gray.600">
+          <Text>Jordan Sim-Smith 2021</Text>
+          <Text mx="4px">·</Text>
+          <Link
+            href="https://github.com/jordansimsmith/football-subscriber"
+            isExternal
+          >
+            View the source code <ExternalLinkIcon mx="2px" />
+          </Link>
+        </Center>
       </Container>
     </Box>
   );
