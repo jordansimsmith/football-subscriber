@@ -5,6 +5,8 @@ import { CompetitionSelect } from '../components/CompetitionSelect';
 import { FixturesTable } from '../components/FixturesTable';
 import { Box, Container, Divider, Heading } from '@chakra-ui/layout';
 import { IOption } from '../types/types';
+import { Alert, AlertIcon } from '@chakra-ui/alert';
+import { useUser } from '@auth0/nextjs-auth0';
 
 const Index: NextPage = () => {
   const [competition, setCompetition] = React.useState<IOption>();
@@ -14,6 +16,8 @@ const Index: NextPage = () => {
     date.setDate(date.getDate() + 7);
     return date;
   });
+
+  const { user } = useUser();
 
   return (
     <Box height="full" bg="gray.50">
@@ -27,6 +31,13 @@ const Index: NextPage = () => {
       </Head>
 
       <Container maxW="container.xl">
+        {!user && (
+          <Alert status="info" marginTop="20px">
+            <AlertIcon />
+            Log in to be notified when your team's fixtures change.
+          </Alert>
+        )}
+
         <Box
           border="1px"
           borderColor="gray.200"

@@ -1,3 +1,4 @@
+import { UserProvider } from '@auth0/nextjs-auth0';
 import { ChakraProvider, Flex } from '@chakra-ui/react';
 import { AppProps } from 'next/dist/next-server/lib/router/router';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -9,12 +10,14 @@ const queryClient = new QueryClient();
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider>
-        <Flex direction="column">
-          <HeaderBar />
-          <Component {...pageProps} />
-        </Flex>
-      </ChakraProvider>
+      <UserProvider>
+        <ChakraProvider>
+          <Flex direction="column">
+            <HeaderBar />
+            <Component {...pageProps} />
+          </Flex>
+        </ChakraProvider>
+      </UserProvider>
     </QueryClientProvider>
   );
 };
