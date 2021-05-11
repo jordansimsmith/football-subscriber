@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from '@auth0/nextjs-auth0';
-import { Button, ButtonGroup } from '@chakra-ui/button';
-import { Box, Container, Flex, Heading } from '@chakra-ui/layout';
+import { Button } from '@chakra-ui/button';
+import { Box, Container, Heading, Wrap, WrapItem } from '@chakra-ui/layout';
 
 export const HeaderBar: React.FC<{}> = () => {
   const { user } = useUser();
@@ -15,12 +15,14 @@ export const HeaderBar: React.FC<{}> = () => {
   return (
     <Box backgroundColor="teal.100" padding="10px">
       <Container maxW="container.xl">
-        <Flex justifyContent="space-between">
-          <Heading>Football Subscriber</Heading>
+        <Wrap justify="space-between" spacing="0">
+          <WrapItem>
+            <Heading>Football Subscriber</Heading>
+          </WrapItem>
 
-          <Flex alignItems="center">
-            <ButtonGroup>
-              {user && (
+          <WrapItem>
+            {user && (
+              <WrapItem>
                 <Button
                   variant="ghost"
                   colorScheme="teal"
@@ -28,7 +30,9 @@ export const HeaderBar: React.FC<{}> = () => {
                 >
                   Subscriptions
                 </Button>
-              )}
+              </WrapItem>
+            )}
+            <WrapItem>
               <Button
                 variant="ghost"
                 colorScheme="teal"
@@ -36,9 +40,9 @@ export const HeaderBar: React.FC<{}> = () => {
               >
                 {user ? 'Logout' : 'Log in'}
               </Button>
-            </ButtonGroup>
-          </Flex>
-        </Flex>
+            </WrapItem>
+          </WrapItem>
+        </Wrap>
       </Container>
     </Box>
   );

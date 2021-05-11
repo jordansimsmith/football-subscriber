@@ -17,7 +17,7 @@ const Index: NextPage = () => {
     return date;
   });
 
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
 
   return (
     <Box height="full" bg="gray.50">
@@ -31,7 +31,7 @@ const Index: NextPage = () => {
       </Head>
 
       <Container maxW="container.xl">
-        {!user && (
+        {!user && !isLoading && (
           <Alert status="info" marginTop="20px">
             <AlertIcon />
             Log in to be notified when your team's fixtures change.
