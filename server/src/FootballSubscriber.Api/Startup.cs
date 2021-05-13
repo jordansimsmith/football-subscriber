@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using FootballSubscriber.Core;
@@ -9,12 +10,14 @@ using FootballSubscriber.Infrastructure.Data;
 using FootballSubscriber.Infrastructure.Services;
 using Hangfire;
 using Hangfire.SqlServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace FootballSubscriber.Api
@@ -35,6 +38,27 @@ namespace FootballSubscriber.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "FootballSubscriber.Api", Version = "v1"});
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please provide the bearer token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
             services.AddCors(options =>
@@ -45,8 +69,21 @@ namespace FootballSubscriber.Api
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .WithExposedHeaders("location")
-                    );
+                );
             });
+
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = Configuration["Auth0:Authority"];
+                    options.Audience = Configuration["Auth0:Audience"];
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = ClaimTypes.NameIdentifier
+                    };
+                });
 
             services.AddDbContext(Configuration.GetConnectionString("FootballSubscriber"));
             services.AddHttpClient<IFixtureApiService, FixtureApiService>();
@@ -85,13 +122,16 @@ namespace FootballSubscriber.Api
 
                 app.UseHangfireDashboard();
             }
+
             app.UseCors("CorsPolicy");
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
-            // TODO: use migrations
             using var scope = app.ApplicationServices.CreateScope();
             using var context = scope.ServiceProvider.GetService<FootballSubscriberContext>();
             context.Database.Migrate();
