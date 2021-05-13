@@ -27,5 +27,19 @@ namespace FootballSubscriber.Api.Controllers
             var location = new Uri($"/subscriptions/{subscription.Id}");
             return Created(location, subscription);
         }
+
+        [HttpGet("")]
+        public async Task<ActionResult> GetSubscriptionsAsync()
+        {
+            var subscriptions =  await _subscriptionService.GetSubscriptionsAsync(User.Identity?.Name);
+            return Ok(subscriptions);
+        }
+
+        [HttpDelete("{subscriptionId:int}")]
+        public async Task<ActionResult> DeleteSubscriptionAsync(int subscriptionId)
+        {
+            await _subscriptionService.DeleteSubscriptionAsync(subscriptionId, User.Identity?.Name);
+            return NoContent();
+        }
     }
 }

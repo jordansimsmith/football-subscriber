@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FootballSubscriber.Core.Entities;
+using FootballSubscriber.Core.Exceptions;
 using FootballSubscriber.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -20,7 +23,7 @@ namespace FootballSubscriber.Core.Services
         public async Task<Subscription> CreateSubscriptionAsync(int teamId, string userId)
         {
             if (await _subscriptionRepository.AnyAsync(s => s.TeamId == teamId && s.UserId == userId))
-                throw new SystemException("A subscription already exists for this team");
+                throw new ConflictException("A subscription already exists for this team");
 
             var subscription = new Subscription
             {
@@ -38,8 +41,24 @@ namespace FootballSubscriber.Core.Services
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                throw new SystemException("An error was encountered when creating the subscription");
+                throw new InternalServerErrorException("An error was encountered when creating the subscription");
             }
+        }
+
+        public async Task<IEnumerable<Subscription>> GetSubscriptionsAsync(string userId)
+        {
+            return await _subscriptionRepository.FindAsync(s => s.UserId == userId, s => s.Id);
+        }
+
+        public async Task DeleteSubscriptionAsync(int subscriptionId, string userId)
+        {
+            var subscription =
+                (await _subscriptionRepository.FindAsync(s => s.Id == subscriptionId && s.UserId == userId, s => s.Id))
+                .FirstOrDefault();
+            if (subscription == null) throw new NotFoundException("The subscription could not be found");
+
+            _subscriptionRepository.Remove(subscription);
+            await _subscriptionRepository.SaveChangesAsync();
         }
     }
 }
