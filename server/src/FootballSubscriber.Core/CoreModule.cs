@@ -14,6 +14,7 @@ namespace FootballSubscriber.Core
             builder.RegisterType<CompetitionService>().As<ICompetitionService>().InstancePerLifetimeScope();
             builder.RegisterType<FixtureService>().As<IFixtureService>().InstancePerLifetimeScope();
             builder.RegisterType<TeamService>().As<ITeamService>().InstancePerLifetimeScope();
+            builder.RegisterType<SubscriptionService>().As<ISubscriptionService>().InstancePerLifetimeScope();
 
             builder
                 .RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
