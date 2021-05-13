@@ -20,6 +20,11 @@ export interface IFixture {
   venueName: string;
 }
 
+export interface ITeam {
+  id: number;
+  name: string;
+}
+
 export interface IOption {
   label: string;
   value: number;

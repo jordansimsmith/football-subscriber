@@ -1,8 +1,16 @@
 import React from 'react';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useUser } from '@auth0/nextjs-auth0';
 import { Button } from '@chakra-ui/button';
-import { Box, Container, Heading, Wrap, WrapItem } from '@chakra-ui/layout';
+import {
+  Box,
+  Container,
+  Heading,
+  Wrap,
+  WrapItem,
+  Link,
+} from '@chakra-ui/layout';
 
 export const HeaderBar: React.FC<{}> = () => {
   const { user } = useUser();
@@ -17,7 +25,9 @@ export const HeaderBar: React.FC<{}> = () => {
       <Container maxW="container.xl">
         <Wrap justify="space-between" spacing="0">
           <WrapItem>
-            <Heading>Football Subscriber</Heading>
+            <Link as={NextLink} href="/">
+              <Heading cursor="pointer">Football Subscriber</Heading>
+            </Link>
           </WrapItem>
 
           <WrapItem>

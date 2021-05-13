@@ -43,7 +43,7 @@ const Index: NextPage = () => {
         {!user && !isLoading && (
           <Alert status="info" marginTop="20px">
             <AlertIcon />
-            Log in to be notified when your team's fixtures change.
+            Log in to be notified when your team&apos;s fixtures change.
           </Alert>
         )}
         <Box
