@@ -23,6 +23,11 @@ namespace FootballSubscriber.Infrastructure.Data.Configurations
                 .WithOne(o => o.AwayTeam)
                 .HasForeignKey(o => o.AwayTeamId)
                 .OnDelete(DeleteBehavior.Restrict);
+            builder
+                .HasMany(o => o.Subscriptions)
+                .WithOne(o => o.Team)
+                .HasForeignKey(o => o.TeamId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
