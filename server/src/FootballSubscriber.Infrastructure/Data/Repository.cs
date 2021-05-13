@@ -43,5 +43,10 @@ namespace FootballSubscriber.Infrastructure.Data
         {
             return await _dbContext.Set<TEntity>().Where(filter).OrderBy(orderBy).ToListAsync();
         }
+
+        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await _dbContext.Set<TEntity>().AnyAsync(filter);
+        }
     }
 }

@@ -40,5 +40,12 @@ namespace FootballSubscriber.Core.Interfaces
         /// <param name="orderBy"></param>
         Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter,
             Expression<Func<TEntity, object>> orderBy);
+
+        /// <summary>
+        ///     Queries the persistence context for the existence of one or more entities
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter);
     }
 }
