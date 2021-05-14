@@ -4,6 +4,7 @@ import { Box, Container, Divider, Heading } from '@chakra-ui/layout';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { SubscriptionForm } from '../components/SubscriptionForm';
+import { SubscriptionsList } from '../components/SubscriptionsList';
 
 interface SubscriptionsPageProps {
   apiToken: string;
@@ -48,6 +49,8 @@ const SubscriptionsPage: NextPage<SubscriptionsPageProps> = ({ apiToken }) => {
           <Heading as="h3" size="md">
             Subscriptions
           </Heading>
+          <Divider marginY="15px" />
+          <SubscriptionsList apiToken={apiToken} />
         </Box>
       </Container>
     </Box>

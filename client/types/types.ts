@@ -25,6 +25,13 @@ export interface ITeam {
   name: string;
 }
 
+export interface ISubscription {
+  id: number;
+  userId: string;
+  teamId: number;
+  teamName: string;
+}
+
 export interface IOption {
   label: string;
   value: number;
