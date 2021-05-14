@@ -21,7 +21,6 @@ namespace FootballSubscriber.Infrastructure.Services
             _configuration = configuration;
             _httpClient = httpClient;
 
-            _httpClient.BaseAddress = new Uri(_configuration["FixtureApi:BaseAddress"]);
             _httpClient.DefaultRequestHeaders.Add("accept", MediaTypeNames.Application.Json);
         }
 
@@ -36,7 +35,8 @@ namespace FootballSubscriber.Infrastructure.Services
                 JsonConvert.SerializeObject(payload),
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
-            var response = await _httpClient.PostAsync("competitionsfromids", stringContent);
+            var getCompetitionsUri = new Uri($"{_configuration["FixtureApi:BaseAddress"]}/competitionsfromids");
+            var response = await _httpClient.PostAsync(getCompetitionsUri, stringContent);
 
             if (!response.IsSuccessStatusCode) throw new SystemException("Could not get competitions");
 
@@ -47,7 +47,9 @@ namespace FootballSubscriber.Infrastructure.Services
 
         public async Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetitionAsync(int competitionId)
         {
-            var response = await _httpClient.GetAsync($"organisations?ids={competitionId}");
+            var getOrganisationsUri =
+                new Uri($"{_configuration["FixtureApi:BaseAddress"]}/organisations?ids={competitionId}");
+            var response = await _httpClient.GetAsync(getOrganisationsUri);
 
             if (!response.IsSuccessStatusCode) throw new SystemException("Could not get organisations for competition");
 
@@ -76,7 +78,8 @@ namespace FootballSubscriber.Infrastructure.Services
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
 
-            var response = await _httpClient.PostAsync("filteredfixtures", stringContent);
+            var getFixturesUri = new Uri($"{_configuration["FixtureApi:BaseAddress"]}/filteredfixtures");
+            var response = await _httpClient.PostAsync(getFixturesUri, stringContent);
 
             if (!response.IsSuccessStatusCode) throw new SystemException("Could not get fixtures for competition");
 
