@@ -1,4 +1,7 @@
-import { Box } from '@chakra-ui/layout';
+import { IconButton } from '@chakra-ui/button';
+import { CloseIcon } from '@chakra-ui/icons';
+import { Center, HStack, List, ListItem, Text } from '@chakra-ui/layout';
+import { Spinner } from '@chakra-ui/spinner';
 import React from 'react';
 import { useQuery } from 'react-query';
 import { ISubscription } from '../types/types';
@@ -23,11 +26,29 @@ export const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
     },
   );
 
+  if (isLoading) {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  }
+
   return (
-    <Box>
+    <List>
       {data?.map((s) => (
-        <div key={s.id}>{s.teamName}</div>
+        <ListItem key={s.id}>
+          <HStack>
+            <IconButton
+              aria-label="Delete subscription"
+              icon={<CloseIcon />}
+              colorScheme="red"
+              variant="ghost"
+            />
+            <Text>{s.teamName}</Text>
+          </HStack>
+        </ListItem>
       ))}
-    </Box>
+    </List>
   );
 };
