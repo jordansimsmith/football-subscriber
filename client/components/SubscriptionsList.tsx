@@ -1,10 +1,9 @@
-import { IconButton } from '@chakra-ui/button';
-import { CloseIcon } from '@chakra-ui/icons';
-import { Center, HStack, List, ListItem, Text } from '@chakra-ui/layout';
+import { Center, List } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import React from 'react';
 import { useQuery } from 'react-query';
 import { ISubscription } from '../types/types';
+import { SubscriptionListItem } from './SubscriptionListItem';
 
 interface SubscriptionsListProps {
   apiToken: string;
@@ -37,17 +36,7 @@ export const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
   return (
     <List>
       {data?.map((s) => (
-        <ListItem key={s.id}>
-          <HStack>
-            <IconButton
-              aria-label="Delete subscription"
-              icon={<CloseIcon />}
-              colorScheme="red"
-              variant="ghost"
-            />
-            <Text>{s.teamName}</Text>
-          </HStack>
-        </ListItem>
+        <SubscriptionListItem subscription={s} apiToken={apiToken} key={s.id} />
       ))}
     </List>
   );
