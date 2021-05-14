@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import {
   Box,
   Button,
@@ -20,6 +20,8 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
 }) => {
   const [team, setTeam] = React.useState<IOption>();
 
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading, isError, isSuccess } = useMutation(
     async (teamId: number) => {
       const res = await fetch('http://localhost:5000/subscriptions', {
@@ -33,6 +35,11 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
       if (!res.ok) {
         throw new Error(await res.text());
       }
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('subscriptions');
+      },
     },
   );
 
