@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FootballSubscriber.Core.Entities;
 using FootballSubscriber.Core.Exceptions;
 using FootballSubscriber.Core.Interfaces;
+using FootballSubscriber.Core.Models;
 using Microsoft.Extensions.Logging;
 
 namespace FootballSubscriber.Core.Services
@@ -47,7 +48,7 @@ namespace FootballSubscriber.Core.Services
 
         public async Task<IEnumerable<Subscription>> GetSubscriptionsAsync(string userId)
         {
-            return await _subscriptionRepository.FindAsync(s => s.UserId == userId, s => s.Id);
+            return await _subscriptionRepository.FindAsync(s => s.UserId == userId, s => s.Id, s => s.Team);
         }
 
         public async Task DeleteSubscriptionAsync(int subscriptionId, string userId)

@@ -39,9 +39,17 @@ namespace FootballSubscriber.Infrastructure.Data
 
         public async Task<IEnumerable<TEntity>> FindAsync(
             Expression<Func<TEntity, bool>> filter,
-            Expression<Func<TEntity, object>> orderBy)
+            Expression<Func<TEntity, object>> orderBy,
+            params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            return await _dbContext.Set<TEntity>().Where(filter).OrderBy(orderBy).ToListAsync();
+            var query = _dbContext.Set<TEntity>().Where(filter);
+            if (includeProperties != null && includeProperties.Any())
+            {
+                query = includeProperties.Aggregate(query, (current, property) => current.Include(property));
+            }
+
+            query = query.OrderBy(orderBy);
+            return await query.ToListAsync();
         }
 
         public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter)
