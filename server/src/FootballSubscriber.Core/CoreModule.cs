@@ -16,6 +16,10 @@ namespace FootballSubscriber.Core
             builder.RegisterType<TeamService>().As<ITeamService>().InstancePerLifetimeScope();
             builder.RegisterType<SubscriptionService>().As<ISubscriptionService>().InstancePerLifetimeScope();
 
+            builder.RegisterType<FixtureChangeNotificationService>()
+                .As<IFixtureChangeNotificationService>()
+                .InstancePerLifetimeScope();
+
             builder
                 .RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
                 .AsClosedTypesOf(typeof(IMerger<>))
