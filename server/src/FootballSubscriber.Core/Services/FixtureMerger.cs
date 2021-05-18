@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using FootballSubscriber.Core.Entities;
 using FootballSubscriber.Core.Interfaces;
@@ -6,11 +7,14 @@ namespace FootballSubscriber.Core.Services
 {
     public class FixtureMerger : MergerBase<Fixture>
     {
+        private readonly IFixtureChangeNotificationService _fixtureChangeNotificationService;
         private readonly IRepository<Fixture> _fixtureRepository;
 
-        public FixtureMerger(IRepository<Fixture> fixtureRepository)
+        public FixtureMerger(IRepository<Fixture> fixtureRepository,
+            IFixtureChangeNotificationService fixtureChangeNotificationService)
         {
             _fixtureRepository = fixtureRepository;
+            _fixtureChangeNotificationService = fixtureChangeNotificationService;
         }
 
         protected override int GetEntityComparableKey(Fixture entity)
@@ -18,30 +22,33 @@ namespace FootballSubscriber.Core.Services
             return entity.ApiId;
         }
 
-        protected override Task UpdateEntityAsync(Fixture oldEntity, Fixture newEntity)
+        protected override async Task UpdateEntityAsync(Fixture oldFixture, Fixture newFixture)
         {
-            // TODO: notify subscribers that fixtures have been updated
-            oldEntity.CompetitionApiId = oldEntity.CompetitionApiId;
-            oldEntity.Competition = oldEntity.Competition;
+            // important changes to the fixture
+            if (newFixture.Date < DateTime.Now.AddDays(7) && newFixture.Date > DateTime.Now &&
+                (oldFixture.Date != newFixture.Date || oldFixture.VenueId != newFixture.VenueId))
+                // notify subscribers
+                await _fixtureChangeNotificationService.NotifySubscribersAsync(oldFixture, newFixture);
 
-            oldEntity.HomeTeamApiId = newEntity.HomeTeamApiId;
-            oldEntity.HomeTeamName = newEntity.HomeTeamName;
-            oldEntity.HomeTeam = newEntity.HomeTeam;
-            oldEntity.HomeOrganisationId = newEntity.HomeOrganisationId;
-            oldEntity.HomeOrganisationLogo = newEntity.HomeOrganisationLogo;
+            oldFixture.CompetitionApiId = oldFixture.CompetitionApiId;
+            oldFixture.Competition = oldFixture.Competition;
 
-            oldEntity.AwayTeamApiId = newEntity.HomeTeamApiId;
-            oldEntity.AwayTeamName = newEntity.AwayTeamName;
-            oldEntity.AwayTeam = newEntity.AwayTeam;
-            oldEntity.AwayOrganisationId = newEntity.AwayOrganisationId;
-            oldEntity.AwayOrganisationLogo = newEntity.AwayOrganisationLogo;
-            
-            oldEntity.Date = newEntity.Date;
-            oldEntity.VenueId = newEntity.VenueId;
-            oldEntity.VenueName = newEntity.VenueName;
-            oldEntity.Address = newEntity.Address;
+            oldFixture.HomeTeamApiId = newFixture.HomeTeamApiId;
+            oldFixture.HomeTeamName = newFixture.HomeTeamName;
+            oldFixture.HomeTeam = newFixture.HomeTeam;
+            oldFixture.HomeOrganisationId = newFixture.HomeOrganisationId;
+            oldFixture.HomeOrganisationLogo = newFixture.HomeOrganisationLogo;
 
-            return Task.CompletedTask;
+            oldFixture.AwayTeamApiId = newFixture.HomeTeamApiId;
+            oldFixture.AwayTeamName = newFixture.AwayTeamName;
+            oldFixture.AwayTeam = newFixture.AwayTeam;
+            oldFixture.AwayOrganisationId = newFixture.AwayOrganisationId;
+            oldFixture.AwayOrganisationLogo = newFixture.AwayOrganisationLogo;
+
+            oldFixture.Date = newFixture.Date;
+            oldFixture.VenueId = newFixture.VenueId;
+            oldFixture.VenueName = newFixture.VenueName;
+            oldFixture.Address = newFixture.Address;
         }
 
         protected override async Task InsertEntityAsync(Fixture newEntity)
