@@ -1,17 +1,16 @@
 using System.Threading.Tasks;
+using FootballSubscriber.Core.Models;
 
 namespace FootballSubscriber.Core.Interfaces
 {
     public interface IEmailService
     {
         /// <summary>
-        ///     Sends an email to the recipient with the supplied subject and content
+        ///     Notifies the user that a fixture they have subscribed to has changed, via email
         /// </summary>
-        /// <param name="recipientAddress"></param>
-        /// <param name="recipientName"></param>
-        /// <param name="subject"></param>
-        /// <param name="content"></param>
+        /// <param name="user"></param>
+        /// <param name="fixtureChange"></param>
         /// <returns></returns>
-        Task SendEmailAsync(string recipientAddress, string recipientName, string subject, string content);
+        public Task SendFixtureChangeEmailAsync(UserProfile user, FixtureChangeModel fixtureChange);
     }
 }
