@@ -10,6 +10,7 @@ namespace FootballSubscriber.Test.Core
 {
     public class FixtureMergerTest
     {
+        private readonly Mock<IFixtureChangeNotificationService> _mockFixtureChangeNotificationService;
         private readonly Mock<IRepository<Fixture>> _mockFixtureRepository;
 
         private readonly FixtureMerger _subject;
@@ -17,8 +18,9 @@ namespace FootballSubscriber.Test.Core
         public FixtureMergerTest()
         {
             _mockFixtureRepository = new Mock<IRepository<Fixture>>();
+            _mockFixtureChangeNotificationService = new Mock<IFixtureChangeNotificationService>();
 
-            _subject = new FixtureMerger(_mockFixtureRepository.Object);
+            _subject = new FixtureMerger(_mockFixtureRepository.Object, _mockFixtureChangeNotificationService.Object);
         }
 
         [Fact]
