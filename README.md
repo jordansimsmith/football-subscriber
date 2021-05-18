@@ -2,8 +2,11 @@
 
 Caching and Notification layer in front of the http://www.aucklandfootball.org.nz football fixtures API.
 
+The official application is slow, taking multiple seconds to load competitions and their fixtures. Also, the fixtures are subject to frequent change in the days leading up to the games, with no notification functionality.
+
 ## Features
 
+- Fixtures are updated on a 15 minute schedule
 - View Auckland Football fixtures by competition and round
 - Subscribe to teams and receive automatic emails when fixtures in the upcoming week change
 
