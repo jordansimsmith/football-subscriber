@@ -25,6 +25,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
+          context: client
           build-args: |
             NEXT_PUBLIC_SERVER_BASE=${{ secrets.SERVER_BASE }}
           tags: |
