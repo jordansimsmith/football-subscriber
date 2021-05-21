@@ -16,7 +16,8 @@ export const CompetitionSelect: React.FC<CompetitionSelectProps> = ({
   const { data, isLoading } = useQuery<ICompetition[]>(
     'competitions',
     async () => {
-      const res = await fetch('http://localhost:5000/competitions');
+      const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/competitions`;
+      const res = await fetch(url);
       const data = await res.json();
       return data;
     },

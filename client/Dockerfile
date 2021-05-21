@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
+ARG NEXT_PUBLIC_SERVER_BASE
 RUN yarn build
 
 FROM node:current-alpine AS run

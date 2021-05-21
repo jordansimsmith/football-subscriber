@@ -39,7 +39,7 @@ export const FixturesTable: React.FC<FixturesTableProps> = ({
         return [];
       }
 
-      const url = new URL('http://localhost:5000/fixtures');
+      const url = new URL(`${process.env.NEXT_PUBLIC_SERVER_BASE}/fixtures`);
       const params = {
         competitionId: competitionId.toString(),
         fromDate: fromDate.toISOString(),

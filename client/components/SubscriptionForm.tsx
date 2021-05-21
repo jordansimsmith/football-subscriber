@@ -24,7 +24,8 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
 
   const { mutate, isLoading, isError, isSuccess } = useMutation(
     async (teamId: number) => {
-      const res = await fetch('http://localhost:5000/subscriptions', {
+      const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/subscriptions`;
+      const res = await fetch(url, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${apiToken}`,

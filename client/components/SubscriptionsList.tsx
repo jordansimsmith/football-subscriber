@@ -15,7 +15,8 @@ export const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
   const { data, isLoading } = useQuery<ISubscription[]>(
     'subscriptions',
     async () => {
-      const res = await fetch('http://localhost:5000/subscriptions', {
+      const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/subscriptions`;
+      const res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${apiToken}`,
         },

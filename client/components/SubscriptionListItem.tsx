@@ -25,15 +25,13 @@ export const SubscriptionListItem: React.FC<SubscriptionListItemProps> = ({
 
   const { mutate, isLoading, isError } = useMutation(
     async (subscriptionId: number) => {
-      const res = await fetch(
-        `http://localhost:5000/subscriptions/${subscriptionId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${apiToken}`,
-          },
+      const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/subscriptions/${subscriptionId}`;
+      const res = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
         },
-      );
+      });
       if (!res.ok) {
         throw new Error(await res.text());
       }

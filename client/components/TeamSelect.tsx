@@ -11,7 +11,8 @@ interface TeamSelectProps {
 
 export const TeamSelect: React.FC<TeamSelectProps> = ({ value, onChange }) => {
   const { data, isLoading } = useQuery<ITeam[]>('teams', async () => {
-    const res = await fetch('http://localhost:5000/teams');
+    const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/teams`;
+    const res = await fetch(url);
     const data = await res.json();
     return data;
   });
