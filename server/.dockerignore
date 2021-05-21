@@ -1,0 +1,7 @@
+Dockerfile
+FootballSubscriber.sln.DotSettings.user
+.gitignore
+.idea/
+.config/
+**/obj/
+**/bin/
