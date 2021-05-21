@@ -29,4 +29,3 @@ jobs:
             NEXT_PUBLIC_SERVER_BASE=${{ secrets.SERVER_BASE }}
           tags: |
             docker.pkg.github.com/${{ github.repository }}/football-subscriber-client:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/football-subscriber-client:${{ github.ref }}
