@@ -10,5 +10,10 @@ namespace FootballSubscriber.Infrastructure
         {
             services.AddDbContext<FootballSubscriberContext>(options => { options.UseSqlServer(connectionString); });
         }
+
+        public static void AddHangfireContext(this IServiceCollection services, string connectionString)
+        {
+            services.AddDbContext<HangfireContext>(options => { options.UseSqlServer(connectionString); });
+        }
     }
 }

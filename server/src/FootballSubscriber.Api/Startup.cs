@@ -7,7 +7,6 @@ using FootballSubscriber.Core.Interfaces;
 using FootballSubscriber.Core.Mappers;
 using FootballSubscriber.Infrastructure;
 using FootballSubscriber.Infrastructure.Data;
-using FootballSubscriber.Infrastructure.Services;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -86,8 +85,8 @@ namespace FootballSubscriber.Api
                 });
 
             services.AddDbContext(Configuration.GetConnectionString("FootballSubscriber"));
-            services.AddHttpClient<IFixtureApiService, FixtureApiService>();
-
+            services.AddHangfireContext(Configuration.GetConnectionString("Hangfire"));
+            
             services.AddHangfire(configuration =>
             {
                 configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
