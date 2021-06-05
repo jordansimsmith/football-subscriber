@@ -16,6 +16,7 @@ ENV NODE_ENV=production
 COPY package.json yarn.lock ./
 RUN yarn install --production
 COPY --from=build /app/.next ./.next
+COPY public ./public
 
 ENTRYPOINT ["yarn", "start"]
 
