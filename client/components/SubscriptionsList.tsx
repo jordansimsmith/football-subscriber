@@ -2,23 +2,20 @@ import { Center, List } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import React from 'react';
 import { useQuery } from 'react-query';
+import { getAccessToken } from '../lib/api';
 import { ISubscription } from '../types/types';
 import { SubscriptionListItem } from './SubscriptionListItem';
 
-interface SubscriptionsListProps {
-  apiToken: string;
-}
-
-export const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
-  apiToken,
-}) => {
+export const SubscriptionsList: React.FC<{}> = ({}) => {
   const { data, isLoading } = useQuery<ISubscription[]>(
     'subscriptions',
     async () => {
+      const accessToken = await getAccessToken();
+
       const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/subscriptions`;
       const res = await fetch(url, {
         headers: {
-          Authorization: `Bearer ${apiToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       const data = await res.json();
@@ -37,7 +34,7 @@ export const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
   return (
     <List>
       {data?.map((s) => (
-        <SubscriptionListItem subscription={s} apiToken={apiToken} key={s.id} />
+        <SubscriptionListItem subscription={s} key={s.id} />
       ))}
     </List>
   );

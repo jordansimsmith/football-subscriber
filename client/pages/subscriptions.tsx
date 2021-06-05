@@ -1,4 +1,3 @@
-import { getAccessToken } from '@auth0/nextjs-auth0';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { Box, Container, Divider, Heading } from '@chakra-ui/layout';
 import { NextPage } from 'next';
@@ -6,11 +5,7 @@ import Head from 'next/head';
 import { SubscriptionForm } from '../components/SubscriptionForm';
 import { SubscriptionsList } from '../components/SubscriptionsList';
 
-interface SubscriptionsPageProps {
-  apiToken: string;
-}
-
-const SubscriptionsPage: NextPage<SubscriptionsPageProps> = ({ apiToken }) => {
+const SubscriptionsPage: NextPage<{}> = () => {
   return (
     <Box height="full" bg="gray.50">
       <Head>
@@ -35,7 +30,7 @@ const SubscriptionsPage: NextPage<SubscriptionsPageProps> = ({ apiToken }) => {
             New Subscription
           </Heading>
           <Divider marginY="15px" />
-          <SubscriptionForm apiToken={apiToken} />
+          <SubscriptionForm />
         </Box>
 
         <Box
@@ -50,19 +45,13 @@ const SubscriptionsPage: NextPage<SubscriptionsPageProps> = ({ apiToken }) => {
             Subscriptions
           </Heading>
           <Divider marginY="15px" />
-          <SubscriptionsList apiToken={apiToken} />
+          <SubscriptionsList />
         </Box>
       </Container>
     </Box>
   );
 };
 
-export const getServerSideProps = withPageAuthRequired({
-  getServerSideProps: async (ctx) => {
-    const token = await getAccessToken(ctx.req, ctx.res);
-
-    return { props: { apiToken: token.accessToken } };
-  },
-});
+export const getServerSideProps = withPageAuthRequired();
 
 export default SubscriptionsPage;

@@ -11,25 +11,26 @@ import {
 } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { ISubscription } from '../types/types';
+import { getAccessToken } from '../lib/api';
 
 interface SubscriptionListItemProps {
   subscription: ISubscription;
-  apiToken: string;
 }
 
 export const SubscriptionListItem: React.FC<SubscriptionListItemProps> = ({
   subscription,
-  apiToken,
 }) => {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(
     async (subscriptionId: number) => {
+      const accessToken = await getAccessToken();
+
       const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/subscriptions/${subscriptionId}`;
       const res = await fetch(url, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${apiToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       if (!res.ok) {

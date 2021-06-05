@@ -31,26 +31,28 @@ export const HeaderBar: React.FC<{}> = () => {
           </WrapItem>
 
           <WrapItem>
-            {user && (
+            <Wrap>
+              {user && (
+                <WrapItem>
+                  <Button
+                    variant="ghost"
+                    colorScheme="teal"
+                    onClick={handleSubscriptions}
+                  >
+                    Subscriptions
+                  </Button>
+                </WrapItem>
+              )}
               <WrapItem>
                 <Button
                   variant="ghost"
                   colorScheme="teal"
-                  onClick={handleSubscriptions}
+                  onClick={user ? handleLogout : handleLogin}
                 >
-                  Subscriptions
+                  {user ? 'Logout' : 'Log in'}
                 </Button>
               </WrapItem>
-            )}
-            <WrapItem>
-              <Button
-                variant="ghost"
-                colorScheme="teal"
-                onClick={user ? handleLogout : handleLogin}
-              >
-                {user ? 'Logout' : 'Log in'}
-              </Button>
-            </WrapItem>
+            </Wrap>
           </WrapItem>
         </Wrap>
       </Container>

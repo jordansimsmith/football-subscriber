@@ -10,25 +10,22 @@ import {
 } from '@chakra-ui/react';
 import { IOption } from './../types/types';
 import { TeamSelect } from './TeamSelect';
+import { getAccessToken } from '../lib/api';
 
-interface SubscriptionFormProps {
-  apiToken: string;
-}
-
-export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
-  apiToken,
-}) => {
+export const SubscriptionForm: React.FC<{}> = ({}) => {
   const [team, setTeam] = React.useState<IOption>();
 
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError, isSuccess } = useMutation(
     async (teamId: number) => {
+      const accessToken = await getAccessToken();
+
       const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/subscriptions`;
       const res = await fetch(url, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${apiToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ teamId }),
