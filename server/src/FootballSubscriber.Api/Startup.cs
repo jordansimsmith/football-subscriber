@@ -2,6 +2,7 @@ using System;
 using System.Security.Claims;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
+using FootballSubscriber.Api.Filters;
 using FootballSubscriber.Core;
 using FootballSubscriber.Core.Interfaces;
 using FootballSubscriber.Core.Mappers;
@@ -89,7 +90,7 @@ namespace FootballSubscriber.Api
 
             services.AddDbContext(Configuration.GetConnectionString("FootballSubscriber"));
             services.AddHangfireContext(Configuration.GetConnectionString("Hangfire"));
-            
+
             services.AddHangfire(configuration =>
             {
                 configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -121,9 +122,8 @@ namespace FootballSubscriber.Api
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FootballSubscriber.Api v1"));
-
-                app.UseHangfireDashboard();
             }
+
 
             app.UseCors("CorsPolicy");
 
@@ -131,6 +131,15 @@ namespace FootballSubscriber.Api
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                IsReadOnlyFunc = _ => !env.IsDevelopment(),
+                Authorization = new[]
+                {
+                    new HangfireDashboardFilter(Configuration["Hangfire:Username"], Configuration["Hangfire:Password"])
+                }
+            });
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 

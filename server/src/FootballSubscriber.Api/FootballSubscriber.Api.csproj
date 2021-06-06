@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FootballSubscriber.Core\FootballSubscriber.Core.csproj" />
     <ProjectReference Include="..\FootballSubscriber.Infrastructure\FootballSubscriber.Infrastructure.csproj" />
   </ItemGroup>
 
