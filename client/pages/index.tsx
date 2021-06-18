@@ -12,13 +12,14 @@ import {
   Link,
   Text,
 } from '@chakra-ui/layout';
-import { IOption } from '../types/types';
+import { IFixture, IOption } from '../types/types';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
 import { useUser } from '@auth0/nextjs-auth0';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useMediaQuery } from '@chakra-ui/react';
 import { FixturesList } from '../components/FixturesList';
 import { FixtureControls } from '../components/FixtureControls';
+import { useQuery } from 'react-query';
 
 const Index: NextPage = () => {
   const [competition, setCompetition] = React.useState<IOption>();
@@ -32,6 +33,32 @@ const Index: NextPage = () => {
   const { user, isLoading } = useUser();
 
   const [isLargeScreen] = useMediaQuery('(min-width: 1000px)');
+
+  const { data } = useQuery<IFixture[]>(
+    [
+      'fixtures',
+      competition?.value,
+      fromDate.toDateString(),
+      toDate.toDateString(),
+    ],
+    async () => {
+      if (!competition?.value) {
+        return [];
+      }
+
+      const url = new URL(`${process.env.NEXT_PUBLIC_SERVER_BASE}/fixtures`);
+      const params = {
+        competitionId: competition.value.toString(),
+        fromDate: fromDate.toISOString(),
+        toDate: toDate.toISOString(),
+      };
+      url.search = new URLSearchParams(params).toString();
+
+      const res = await fetch(url.toString());
+      const data = await res.json();
+      return data;
+    },
+  );
 
   return (
     <Box height="full" bg="gray.50">
@@ -76,11 +103,7 @@ const Index: NextPage = () => {
           background="white"
         >
           {isLargeScreen ? (
-            <FixturesTable
-              competitionId={competition?.value}
-              fromDate={fromDate}
-              toDate={toDate}
-            />
+            <FixturesTable fixtures={data} />
           ) : (
             <FixturesList competitionId={competition?.value} />
           )}
