@@ -1,8 +1,6 @@
-import React from 'react';
-import { NextPage } from 'next';
-import Head from 'next/head';
-import { CompetitionSelect } from '../components/CompetitionSelect';
-import { FixturesTable } from '../components/FixturesTable';
+import { useUser } from '@auth0/nextjs-auth0';
+import { Alert, AlertIcon } from '@chakra-ui/alert';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box,
   Center,
@@ -12,14 +10,18 @@ import {
   Link,
   Text,
 } from '@chakra-ui/layout';
-import { IFixture, IOption } from '../types/types';
-import { Alert, AlertIcon } from '@chakra-ui/alert';
-import { useUser } from '@auth0/nextjs-auth0';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { useMediaQuery } from '@chakra-ui/react';
-import { FixturesList } from '../components/FixturesList';
-import { FixtureControls } from '../components/FixtureControls';
-import { useQuery } from 'react-query';
+import { NextPage } from 'next';
+import Head from 'next/head';
+import React from 'react';
+import { CompetitionSelect } from '../components/CompetitionSelect';
+import { IOption } from '../types/types';
+import dynamic from 'next/dynamic';
+
+// uses media queries, can't be rendered on the server
+const FixtureDisplay = dynamic(() => import('../components/FixtureDisplay'), {
+  ssr: false,
+  loading: () => null,
+});
 
 const Index: NextPage = () => {
   const [competition, setCompetition] = React.useState<IOption>();
@@ -31,34 +33,6 @@ const Index: NextPage = () => {
   });
 
   const { user, isLoading } = useUser();
-
-  const [isLargeScreen] = useMediaQuery('(min-width: 800px)');
-
-  const { data } = useQuery<IFixture[]>(
-    [
-      'fixtures',
-      competition?.value,
-      fromDate.toDateString(),
-      toDate.toDateString(),
-    ],
-    async () => {
-      if (!competition?.value) {
-        return [];
-      }
-
-      const url = new URL(`${process.env.NEXT_PUBLIC_SERVER_BASE}/fixtures`);
-      const params = {
-        competitionId: competition.value.toString(),
-        fromDate: fromDate.toISOString(),
-        toDate: toDate.toISOString(),
-      };
-      url.search = new URLSearchParams(params).toString();
-
-      const res = await fetch(url.toString());
-      const data = await res.json();
-      return data;
-    },
-  );
 
   return (
     <Box height="full" bg="gray.50">
@@ -93,29 +67,14 @@ const Index: NextPage = () => {
           <CompetitionSelect value={competition} onChange={setCompetition} />
         </Box>
 
-        <Box
-          border="1px"
-          borderColor="gray.200"
-          padding="20px"
-          borderRadius="md"
-          marginY="20px"
-          overflowX="auto"
-          background="white"
-        >
-          {isLargeScreen ? (
-            <FixturesTable fixtures={data} />
-          ) : (
-            <FixturesList fixtures={data} />
-          )}
+        <FixtureDisplay
+          competitionId={competition?.value}
+          toDate={toDate}
+          fromDate={fromDate}
+          onToDateChange={setToDate}
+          onFromDateChange={setFromDate}
+        />
 
-          <FixtureControls
-            disabled={!competition?.value}
-            fromDate={fromDate}
-            toDate={toDate}
-            onFromDateChange={setFromDate}
-            onToDateChange={setToDate}
-          />
-        </Box>
         <Center color="gray.600">
           <Text>Jordan Sim-Smith 2021</Text>
           <Text mx="4px">·</Text>
