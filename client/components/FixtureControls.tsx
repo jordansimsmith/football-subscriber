@@ -49,7 +49,6 @@ export const FixtureControls: React.FC<FixtureControlsProps> = ({
   };
 
   const [isMediumScreen] = useMediaQuery('(min-width: 600px)');
-  console.log(isMediumScreen);
 
   return (
     <Box>

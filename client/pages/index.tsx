@@ -32,7 +32,7 @@ const Index: NextPage = () => {
 
   const { user, isLoading } = useUser();
 
-  const [isLargeScreen] = useMediaQuery('(min-width: 1000px)');
+  const [isLargeScreen] = useMediaQuery('(min-width: 800px)');
 
   const { data } = useQuery<IFixture[]>(
     [
@@ -105,7 +105,7 @@ const Index: NextPage = () => {
           {isLargeScreen ? (
             <FixturesTable fixtures={data} />
           ) : (
-            <FixturesList competitionId={competition?.value} />
+            <FixturesList fixtures={data} />
           )}
 
           <FixtureControls

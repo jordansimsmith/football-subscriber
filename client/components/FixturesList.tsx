@@ -1,11 +1,24 @@
+import { List, Text } from '@chakra-ui/react';
 import React from 'react';
+import { IFixture } from '../types/types';
+import { FixtureListItem } from './FixtureListItem';
 
 interface FixturesListProps {
-  competitionId?: number;
+  fixtures: IFixture[];
 }
 
-export const FixturesList: React.FC<FixturesListProps> = ({
-  competitionId,
-}) => {
-  return <div>responsive list yo</div>;
+export const FixturesList: React.FC<FixturesListProps> = ({ fixtures }) => {
+  if (!fixtures?.length) {
+    return (
+      <Text>No fixtures available for the current competition and round.</Text>
+    );
+  }
+
+  return (
+    <List>
+      {fixtures.map((f) => (
+        <FixtureListItem key={f.id} fixture={f} />
+      ))}
+    </List>
+  );
 };
