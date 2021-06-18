@@ -13,33 +13,29 @@ export const FixtureListItem: React.FC<FixtureListItemProps> = ({
   return (
     <ListItem>
       <VStack padding="20px">
-        <HStack>
-          <Text fontWeight="bold" marginRight="5px">
-            {fixture.homeTeamName}
-          </Text>
-          <Image
-            src={fixture.homeOrganisationLogo?.replace('//', 'https://')}
-            alt="Home team"
-            width="40px"
-            height="40px"
-            objectFit="contain"
-          />
-        </HStack>
+        <Image
+          src={fixture.homeOrganisationLogo?.replace('//', 'https://')}
+          alt="Home team"
+          width="40px"
+          height="40px"
+          objectFit="contain"
+        />
+        <Text fontWeight="bold" marginRight="5px" textAlign="center">
+          {fixture.homeTeamName}
+        </Text>
 
         <Text color="gray.600">vs</Text>
 
-        <HStack>
-          <Text fontWeight="bold" marginRight="5px">
-            {fixture.awayTeamName}
-          </Text>
-          <Image
-            src={fixture.awayOrganisationLogo?.replace('//', 'https://')}
-            alt="Away team"
-            width="40px"
-            height="40px"
-            objectFit="contain"
-          />
-        </HStack>
+        <Image
+          src={fixture.awayOrganisationLogo?.replace('//', 'https://')}
+          alt="Away team"
+          width="40px"
+          height="40px"
+          objectFit="contain"
+        />
+        <Text fontWeight="bold" marginRight="5px" textAlign="center">
+          {fixture.awayTeamName}
+        </Text>
 
         <Text>{new Date(fixture.date).toLocaleString()}</Text>
 
