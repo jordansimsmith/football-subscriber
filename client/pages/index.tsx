@@ -18,6 +18,7 @@ import { useUser } from '@auth0/nextjs-auth0';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useMediaQuery } from '@chakra-ui/react';
 import { FixturesList } from '../components/FixturesList';
+import { FixtureControls } from '../components/FixtureControls';
 
 const Index: NextPage = () => {
   const [competition, setCompetition] = React.useState<IOption>();
@@ -79,12 +80,18 @@ const Index: NextPage = () => {
               competitionId={competition?.value}
               fromDate={fromDate}
               toDate={toDate}
-              onFromDateChange={setFromDate}
-              onToDateChange={setToDate}
             />
           ) : (
             <FixturesList competitionId={competition?.value} />
           )}
+
+          <FixtureControls
+            disabled={!competition?.value}
+            fromDate={fromDate}
+            toDate={toDate}
+            onFromDateChange={setFromDate}
+            onToDateChange={setToDate}
+          />
         </Box>
         <Center color="gray.600">
           <Text>Jordan Sim-Smith 2021</Text>
