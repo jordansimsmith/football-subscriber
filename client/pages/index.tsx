@@ -16,6 +16,8 @@ import { IOption } from '../types/types';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
 import { useUser } from '@auth0/nextjs-auth0';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { useMediaQuery } from '@chakra-ui/react';
+import { FixturesList } from '../components/FixturesList';
 
 const Index: NextPage = () => {
   const [competition, setCompetition] = React.useState<IOption>();
@@ -27,6 +29,8 @@ const Index: NextPage = () => {
   });
 
   const { user, isLoading } = useUser();
+
+  const [isLargeScreen] = useMediaQuery('(min-width: 1000px)');
 
   return (
     <Box height="full" bg="gray.50">
@@ -60,6 +64,7 @@ const Index: NextPage = () => {
           <Divider marginY="15px" />
           <CompetitionSelect value={competition} onChange={setCompetition} />
         </Box>
+
         <Box
           border="1px"
           borderColor="gray.200"
@@ -69,13 +74,17 @@ const Index: NextPage = () => {
           overflowX="auto"
           background="white"
         >
-          <FixturesTable
-            competitionId={competition?.value}
-            fromDate={fromDate}
-            toDate={toDate}
-            onFromDateChange={setFromDate}
-            onToDateChange={setToDate}
-          />
+          {isLargeScreen ? (
+            <FixturesTable
+              competitionId={competition?.value}
+              fromDate={fromDate}
+              toDate={toDate}
+              onFromDateChange={setFromDate}
+              onToDateChange={setToDate}
+            />
+          ) : (
+            <FixturesList competitionId={competition?.value} />
+          )}
         </Box>
         <Center color="gray.600">
           <Text>Jordan Sim-Smith 2021</Text>
