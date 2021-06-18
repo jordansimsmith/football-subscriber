@@ -1,6 +1,7 @@
-import { Flex, Image, Tooltip, Wrap, WrapItem } from '@chakra-ui/react';
-import { Tr, Td } from '@chakra-ui/table';
 import React from 'react';
+import Image from 'next/image';
+import { Flex, Tooltip, Wrap, WrapItem } from '@chakra-ui/react';
+import { Tr, Td } from '@chakra-ui/table';
 import { IFixture } from '../types/types';
 
 interface FixtureRowProps {
@@ -15,9 +16,10 @@ export const FixtureRow: React.FC<FixtureRowProps> = ({ fixture }) => {
           <Wrap>
             <WrapItem>
               <Image
-                src={fixture.homeOrganisationLogo}
-                alt="Home team logo"
-                boxSize="40px"
+                src={fixture.homeOrganisationLogo?.replace('//', 'https://')}
+                alt="Home team"
+                width="40px"
+                height="40px"
                 objectFit="contain"
               />
             </WrapItem>
@@ -30,9 +32,10 @@ export const FixtureRow: React.FC<FixtureRowProps> = ({ fixture }) => {
           <Wrap>
             <WrapItem>
               <Image
-                src={fixture.awayOrganisationLogo}
-                alt="Away team logo"
-                boxSize="40px"
+                src={fixture.awayOrganisationLogo?.replace('//', 'https://')}
+                alt="Away team"
+                width="40px"
+                height="40px"
                 objectFit="contain"
               />
             </WrapItem>
