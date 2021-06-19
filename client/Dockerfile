@@ -17,6 +17,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --production
 COPY --from=build /app/.next ./.next
 COPY public ./public
+COPY next.config.js .
 
 ENTRYPOINT ["yarn", "start"]
 
