@@ -4,6 +4,7 @@ namespace FootballSubscriber.Infrastructure.Models
 {
     public class FixtureChangeTemplateData
     {
+        [JsonProperty("subject")] public string Subject { get; set; }
         [JsonProperty("name")] public string Name { get; set; }
 
         [JsonProperty("home_team")] public string HomeTeam { get; set; }

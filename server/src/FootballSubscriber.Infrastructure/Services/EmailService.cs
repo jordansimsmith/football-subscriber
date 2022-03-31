@@ -30,6 +30,7 @@ namespace FootballSubscriber.Infrastructure.Services
 
             var templateData = new FixtureChangeTemplateData
             {
+                Subject = $"Fixture Change: {fixtureChange.HomeTeam} vs {fixtureChange.AwayTeam}",
                 ApplicationUrl = _configuration["ApplicationUrl"],
                 AwayTeam = fixtureChange.AwayTeam,
                 HomeTeam = fixtureChange.HomeTeam,
@@ -47,7 +48,6 @@ namespace FootballSubscriber.Infrastructure.Services
             var msg = new SendGridMessage
             {
                 From = sender,
-                Subject = $"Fixture Change: {fixtureChange.HomeTeam} vs {fixtureChange.AwayTeam}",
                 TemplateId = templateId
             };
             msg.AddTo(recipient);
