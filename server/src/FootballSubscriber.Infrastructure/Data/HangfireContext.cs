@@ -6,7 +6,6 @@ namespace FootballSubscriber.Infrastructure.Data
     {
         public HangfireContext(DbContextOptions<HangfireContext> options) : base(options)
         {
-            Database.EnsureCreated();
         }
     }
 }

@@ -144,8 +144,11 @@ namespace FootballSubscriber.Api
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             using var scope = app.ApplicationServices.CreateScope();
-            using var context = scope.ServiceProvider.GetService<FootballSubscriberContext>();
-            context.Database.Migrate();
+            using var footballSubscriberContext = scope.ServiceProvider.GetService<FootballSubscriberContext>();
+            footballSubscriberContext!.Database.Migrate();
+            
+            using var hangfireContext = scope.ServiceProvider.GetService<HangfireContext>();
+            hangfireContext!.Database.EnsureCreated();
 
             ConfigureRecurringJobs();
         }
