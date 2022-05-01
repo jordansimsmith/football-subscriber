@@ -134,7 +134,6 @@ namespace FootballSubscriber.Api
 
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
-                IsReadOnlyFunc = _ => !env.IsDevelopment(),
                 Authorization = new[]
                 {
                     new HangfireDashboardFilter(Configuration["Hangfire:Username"], Configuration["Hangfire:Password"])
