@@ -48,7 +48,7 @@ namespace FootballSubscriber.Infrastructure.Services
         public async Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetitionAsync(int competitionId)
         {
             var getOrganisationsUri =
-                new Uri($"{_configuration["FixtureApi:BaseAddress"]}/organisations?ids={competitionId}");
+                new Uri($"{_configuration["FixtureApi:BaseAddress"]}/organisations?ids={competitionId}&season={_configuration["FixtureApi:SeasonId"]}");
             var response = await _httpClient.GetAsync(getOrganisationsUri);
 
             if (!response.IsSuccessStatusCode) throw new SystemException("Could not get organisations for competition");
