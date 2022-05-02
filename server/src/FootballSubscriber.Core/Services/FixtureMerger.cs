@@ -25,10 +25,12 @@ public class FixtureMerger : MergerBase<Fixture>
     protected override async Task UpdateEntityAsync(Fixture oldFixture, Fixture newFixture)
     {
         // important changes to the fixture
-        if (newFixture.Date < DateTime.Now.AddDays(7) && newFixture.Date > DateTime.Now &&
+        if (newFixture.Date < DateTime.UtcNow.AddDays(7) && newFixture.Date > DateTime.UtcNow &&
             (oldFixture.Date != newFixture.Date || oldFixture.VenueId != newFixture.VenueId))
+        {
             // notify subscribers
             await _fixtureChangeNotificationService.NotifySubscribersAsync(oldFixture, newFixture);
+        }
 
         oldFixture.CompetitionApiId = oldFixture.CompetitionApiId;
         oldFixture.Competition = oldFixture.Competition;
@@ -45,7 +47,7 @@ public class FixtureMerger : MergerBase<Fixture>
         oldFixture.AwayOrganisationId = newFixture.AwayOrganisationId;
         oldFixture.AwayOrganisationLogo = newFixture.AwayOrganisationLogo;
 
-        oldFixture.Date = newFixture.Date;
+        oldFixture.Date = newFixture.Date.ToUniversalTime();
         oldFixture.VenueId = newFixture.VenueId;
         oldFixture.VenueName = newFixture.VenueName;
         oldFixture.Address = newFixture.Address;

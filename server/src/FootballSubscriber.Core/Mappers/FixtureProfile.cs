@@ -15,6 +15,7 @@ public class FixtureProfile : Profile
             .ForMember(o => o.HomeTeamId, cfg => cfg.Ignore())
             .ForMember(o => o.AwayTeamId, cfg => cfg.Ignore())
             .ForMember(o => o.HomeTeamApiId, cfg => cfg.MapFrom(o => o.HomeTeamId))
-            .ForMember(o => o.AwayTeamApiId, cfg => cfg.MapFrom(o => o.AwayTeamId));
+            .ForMember(o => o.AwayTeamApiId, cfg => cfg.MapFrom(o => o.AwayTeamId))
+            .ForMember(o => o.Date, cfg => cfg.MapFrom(o => o.Date.ToUniversalTime()));
     }
 }

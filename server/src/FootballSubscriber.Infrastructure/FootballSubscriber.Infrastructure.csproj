@@ -7,12 +7,16 @@
   <ItemGroup>
     <PackageReference Include="Auth0.ManagementApi" Version="7.15.0" />
     <PackageReference Include="Autofac" Version="6.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
     <PackageReference Include="SendGrid" Version="9.27.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FootballSubscriber.Core\FootballSubscriber.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Migrations" />
   </ItemGroup>
 
 </Project>
