@@ -1,4 +1,4 @@
-import { Divider, HStack, ListItem, Text, VStack } from '@chakra-ui/react';
+import { Divider, ListItem, Text, VStack } from '@chakra-ui/react';
 import Image from 'next/image';
 import React from 'react';
 import { IFixture } from '../types/types';
