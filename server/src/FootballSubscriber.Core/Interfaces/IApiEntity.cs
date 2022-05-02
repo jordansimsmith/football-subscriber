@@ -1,10 +1,9 @@
-namespace FootballSubscriber.Core.Interfaces
+namespace FootballSubscriber.Core.Interfaces;
+
+public interface IApiEntity
 {
-    public interface IApiEntity
-    {
-        /// <summary>
-        ///     Third party unique identifier
-        /// </summary>
-        int ApiId { get; set; }
-    }
+    /// <summary>
+    ///     Third party unique identifier
+    /// </summary>
+    int ApiId { get; set; }
 }

@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace FootballSubscriber.Infrastructure.Data
+namespace FootballSubscriber.Infrastructure.Data;
+
+public class HangfireContext : DbContext
 {
-    public class HangfireContext : DbContext
+    public HangfireContext(DbContextOptions<HangfireContext> options) : base(options)
     {
-        public HangfireContext(DbContextOptions<HangfireContext> options) : base(options)
-        {
-        }
     }
 }

@@ -1,19 +1,18 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
-namespace FootballSubscriber.Infrastructure.Data
+namespace FootballSubscriber.Infrastructure.Data;
+
+public class FootballSubscriberContext : DbContext
 {
-    public class FootballSubscriberContext : DbContext
+    public FootballSubscriberContext(DbContextOptions<FootballSubscriberContext> options) : base(options)
     {
-        public FootballSubscriberContext(DbContextOptions<FootballSubscriberContext> options) : base(options)
-        {
-        }
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        }
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

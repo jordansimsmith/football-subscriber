@@ -6,74 +6,73 @@ using FootballSubscriber.Core.Services;
 using Moq;
 using Xunit;
 
-namespace FootballSubscriber.Test.Core
+namespace FootballSubscriber.Test.Core;
+
+public class TeamMergerTest
 {
-    public class TeamMergerTest
+    private readonly Mock<IRepository<Team>> _mockTeamRepository;
+
+    private readonly TeamMerger _subject;
+
+    public TeamMergerTest()
     {
-        private readonly Mock<IRepository<Team>> _mockTeamRepository;
-
-        private readonly TeamMerger _subject;
-
-        public TeamMergerTest()
-        {
-            _mockTeamRepository = new Mock<IRepository<Team>>();
+        _mockTeamRepository = new Mock<IRepository<Team>>();
             
-            _subject = new TeamMerger(_mockTeamRepository.Object);
-        }
+        _subject = new TeamMerger(_mockTeamRepository.Object);
+    }
 
-        [Fact]
-        public async Task MergeAsync_Should_Merge_Teams_Correctly()
+    [Fact]
+    public async Task MergeAsync_Should_Merge_Teams_Correctly()
+    {
+        // arrange
+        var oldTeams = new[]
         {
-            // arrange
-            var oldTeams = new[]
+            new Team
             {
-                new Team
-                {
-                    ApiId = 1,
-                    Name = "name 1"
-                },
-                new Team
-                {
-                    ApiId = 3,
-                    Name = "name 3"
-                },
-                new Team
-                {
-                    ApiId = 4,
-                    Name = "name 4"
-                }
-            };
-
-            var newTeams = new[]
+                ApiId = 1,
+                Name = "name 1"
+            },
+            new Team
             {
-                new Team
-                {
-                    ApiId = 1,
-                    Name = "name 1 updated"
-                },
-                new Team
-                {
-                    ApiId = 2,
-                    Name = "name 2"
-                },
-                new Team
-                {
-                    ApiId = 5,
-                    Name = "name 5"
-                }
-            };
+                ApiId = 3,
+                Name = "name 3"
+            },
+            new Team
+            {
+                ApiId = 4,
+                Name = "name 4"
+            }
+        };
 
-            // act
-            await _subject.MergeAsync(oldTeams, newTeams);
+        var newTeams = new[]
+        {
+            new Team
+            {
+                ApiId = 1,
+                Name = "name 1 updated"
+            },
+            new Team
+            {
+                ApiId = 2,
+                Name = "name 2"
+            },
+            new Team
+            {
+                ApiId = 5,
+                Name = "name 5"
+            }
+        };
 
-            // assert
-            _mockTeamRepository.Verify(x => x.AddAsync(It.Is<Team>(c => c.ApiId == 2)), Times.Once);
-            _mockTeamRepository.Verify(x => x.AddAsync(It.Is<Team>(c => c.ApiId == 5)), Times.Once);
-            _mockTeamRepository.Verify(x => x.Remove(It.IsAny<Team>()), Times.Never);
+        // act
+        await _subject.MergeAsync(oldTeams, newTeams);
 
-            _mockTeamRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+        // assert
+        _mockTeamRepository.Verify(x => x.AddAsync(It.Is<Team>(c => c.ApiId == 2)), Times.Once);
+        _mockTeamRepository.Verify(x => x.AddAsync(It.Is<Team>(c => c.ApiId == 5)), Times.Once);
+        _mockTeamRepository.Verify(x => x.Remove(It.IsAny<Team>()), Times.Never);
 
-            oldTeams[0].Name.Should().Be(newTeams[0].Name);
-        }
+        _mockTeamRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+
+        oldTeams[0].Name.Should().Be(newTeams[0].Name);
     }
 }

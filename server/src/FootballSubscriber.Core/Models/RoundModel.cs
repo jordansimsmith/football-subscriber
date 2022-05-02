@@ -1,10 +1,9 @@
 using System;
 
-namespace FootballSubscriber.Core.Models
+namespace FootballSubscriber.Core.Models;
+
+public class RoundModel
 {
-    public class RoundModel
-    {
-        public DateTime From { get; set; }
-        public int Name { get; set; }
-    }
+    public DateTime From { get; set; }
+    public int Name { get; set; }
 }

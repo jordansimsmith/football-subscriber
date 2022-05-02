@@ -1,7 +1,6 @@
-namespace FootballSubscriber.Core.Models
+namespace FootballSubscriber.Core.Models;
+
+public class SubscriptionModel
 {
-    public class SubscriptionModel
-    {
-        public int TeamId { get; set; }
-    }
+    public int TeamId { get; set; }
 }

@@ -1,11 +1,10 @@
 using System;
 
-namespace FootballSubscriber.Core.Exceptions
+namespace FootballSubscriber.Core.Exceptions;
+
+public class ConflictException : SystemException
 {
-    public class ConflictException : SystemException
+    public ConflictException(string message) : base(message)
     {
-        public ConflictException(string message) : base(message)
-        {
-        }
     }
 }

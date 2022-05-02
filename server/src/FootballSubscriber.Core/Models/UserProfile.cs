@@ -1,8 +1,7 @@
-namespace FootballSubscriber.Core.Models
+namespace FootballSubscriber.Core.Models;
+
+public class UserProfile
 {
-    public class UserProfile
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-    }
+    public string Name { get; set; }
+    public string Email { get; set; }
 }
