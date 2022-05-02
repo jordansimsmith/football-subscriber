@@ -131,6 +131,11 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
+GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute
+{
+    Attempts = 0,
+    OnAttemptsExceeded = AttemptsExceededAction.Fail
+});
 RecurringJob.AddOrUpdate<IRefreshFixtureService>(x => x.RefreshFixturesAsync(), "*/15 * * * *");
 
 app.Run();
