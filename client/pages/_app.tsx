@@ -1,13 +1,13 @@
 import { UserProvider } from '@auth0/nextjs-auth0';
 import { ChakraProvider, Flex } from '@chakra-ui/react';
-import { AppProps } from 'next/dist/next-server/lib/router/router';
+import { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { HeaderBar } from '../components/HeaderBar';
 import '../styles/globals.css';
 
 const queryClient = new QueryClient();
 
-const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
