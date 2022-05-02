@@ -8,7 +8,9 @@ interface FixturesTableProps {
   fixtures: IFixture[];
 }
 
-export const FixturesTable: React.FC<FixturesTableProps> = ({ fixtures }) => {
+export const FixturesTable = ({
+  fixtures,
+}: FixturesTableProps): JSX.Element => {
   const fixtureRows = React.useMemo(() => {
     if (!fixtures?.length) {
       return (

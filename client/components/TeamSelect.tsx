@@ -9,7 +9,10 @@ interface TeamSelectProps {
   onChange: (option: IOption) => void;
 }
 
-export const TeamSelect: React.FC<TeamSelectProps> = ({ value, onChange }) => {
+export const TeamSelect = ({
+  value,
+  onChange,
+}: TeamSelectProps): JSX.Element => {
   const { data, isLoading } = useQuery<ITeam[]>('teams', async () => {
     const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/teams`;
     const res = await fetch(url);

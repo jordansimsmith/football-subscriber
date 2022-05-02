@@ -9,10 +9,10 @@ interface CompetitionSelectProps {
   onChange: (option: IOption) => void;
 }
 
-export const CompetitionSelect: React.FC<CompetitionSelectProps> = ({
+export const CompetitionSelect = ({
   value,
   onChange,
-}) => {
+}: CompetitionSelectProps): JSX.Element => {
   const { data, isLoading } = useQuery<ICompetition[]>(
     'competitions',
     async () => {

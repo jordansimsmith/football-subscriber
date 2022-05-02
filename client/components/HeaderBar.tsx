@@ -12,7 +12,7 @@ import {
   Link,
 } from '@chakra-ui/layout';
 
-export const HeaderBar: React.FC<{}> = () => {
+export const HeaderBar = (): JSX.Element => {
   const { user } = useUser();
   const router = useRouter();
 

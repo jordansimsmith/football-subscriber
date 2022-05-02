@@ -7,7 +7,7 @@ interface FixturesListProps {
   fixtures: IFixture[];
 }
 
-export const FixturesList: React.FC<FixturesListProps> = ({ fixtures }) => {
+export const FixturesList = ({ fixtures }: FixturesListProps): JSX.Element => {
   if (!fixtures?.length) {
     return (
       <>

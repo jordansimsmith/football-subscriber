@@ -7,9 +7,9 @@ interface FixtureListItemProps {
   fixture: IFixture;
 }
 
-export const FixtureListItem: React.FC<FixtureListItemProps> = ({
+export const FixtureListItem = ({
   fixture,
-}) => {
+}: FixtureListItemProps): JSX.Element => {
   return (
     <ListItem>
       <VStack padding="20px">

@@ -17,9 +17,9 @@ interface SubscriptionListItemProps {
   subscription: ISubscription;
 }
 
-export const SubscriptionListItem: React.FC<SubscriptionListItemProps> = ({
+export const SubscriptionListItem = ({
   subscription,
-}) => {
+}: SubscriptionListItemProps): JSX.Element => {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(

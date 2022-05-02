@@ -14,13 +14,13 @@ interface FixtureDisplayProps {
   onToDateChange: (date: Date) => void;
 }
 
-export const FixtureDisplay: React.FC<FixtureDisplayProps> = ({
+export const FixtureDisplay = ({
   competitionId,
   fromDate,
   toDate,
   onFromDateChange,
   onToDateChange,
-}) => {
+}: FixtureDisplayProps): JSX.Element => {
   const [isLargeScreen] = useMediaQuery('(min-width: 800px)');
 
   const { data } = useQuery<IFixture[]>(

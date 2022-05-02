@@ -6,7 +6,7 @@ import { getAccessToken } from '../lib/api';
 import { ISubscription } from '../types/types';
 import { SubscriptionListItem } from './SubscriptionListItem';
 
-export const SubscriptionsList: React.FC<{}> = ({}) => {
+export const SubscriptionsList = (): JSX.Element => {
   const { data, isLoading } = useQuery<ISubscription[]>(
     'subscriptions',
     async () => {

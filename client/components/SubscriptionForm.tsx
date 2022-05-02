@@ -12,7 +12,7 @@ import { IOption } from './../types/types';
 import { TeamSelect } from './TeamSelect';
 import { getAccessToken } from '../lib/api';
 
-export const SubscriptionForm: React.FC<{}> = ({}) => {
+export const SubscriptionForm = (): JSX.Element => {
   const [team, setTeam] = React.useState<IOption>();
 
   const queryClient = useQueryClient();

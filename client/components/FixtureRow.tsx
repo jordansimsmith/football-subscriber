@@ -8,7 +8,7 @@ interface FixtureRowProps {
   fixture: IFixture;
 }
 
-export const FixtureRow: React.FC<FixtureRowProps> = ({ fixture }) => {
+export const FixtureRow = ({ fixture }: FixtureRowProps): JSX.Element => {
   return (
     <Tr>
       <Td>

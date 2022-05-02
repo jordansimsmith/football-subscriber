@@ -17,13 +17,13 @@ interface FixtureControlsProps {
   onToDateChange: (date: Date) => void;
 }
 
-export const FixtureControls: React.FC<FixtureControlsProps> = ({
+export const FixtureControls = ({
   disabled,
   fromDate,
   toDate,
   onFromDateChange,
   onToDateChange,
-}) => {
+}: FixtureControlsProps): JSX.Element => {
   const handleDateChange = (dateChange: number) => () => {
     const newFromDate = new Date(fromDate);
     const newToDate = new Date(toDate);
