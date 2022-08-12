@@ -22,5 +22,5 @@ public class Team : IApiEntity
     ///     Third party unique identifier
     /// </summary>
     [JsonIgnore]
-    public int ApiId { get; set; }
+    public long ApiId { get; set; }
 }

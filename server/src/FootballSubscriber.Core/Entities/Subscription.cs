@@ -10,5 +10,4 @@ public class Subscription
     [JsonIgnore] public Team Team { get; set; }
 
     public int TeamId { get; set; }
-    public string TeamName => Team?.Name;
 }

@@ -15,23 +15,23 @@ public class Fixture: IApiEntity
     ///     Third party unique identifier
     /// </summary>
     [JsonIgnore]
-    public int ApiId { get; set; }
+    public long ApiId { get; set; }
 
     /// <summary>
     ///     Set on save
     /// </summary>
     [JsonIgnore]
-    public int CompetitionApiId { get; set; }
+    public long CompetitionApiId { get; set; }
 
     public int HomeTeamId { get; set; }
-    [JsonIgnore] public int HomeTeamApiId { get; set; }
+    [JsonIgnore] public long HomeTeamApiId { get; set; }
     public string HomeTeamName { get; set; }
     [JsonIgnore] public Team HomeTeam { get; set; }
     public int HomeOrganisationId { get; set; }
     public string HomeOrganisationLogo { get; set; }
 
     public int AwayTeamId { get; set; }
-    [JsonIgnore] public int AwayTeamApiId { get; set; }
+    [JsonIgnore] public long AwayTeamApiId { get; set; }
     [JsonIgnore] public Team AwayTeam { get; set; }
     public string AwayTeamName { get; set; }
     public int AwayOrganisationId { get; set; }

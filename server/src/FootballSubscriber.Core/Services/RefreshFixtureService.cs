@@ -55,7 +55,7 @@ public class RefreshFixtureService : IRefreshFixtureService
         _logger.LogInformation("Retrieved competitions");
 
         // key: ApiId, value: Team
-        var newTeams = new ConcurrentDictionary<int, Team>();
+        var newTeams = new ConcurrentDictionary<long, Team>();
         // key: competitionId, value: List of fixtures
         var newFixtures = new ConcurrentDictionary<int, IList<Fixture>>();
 
@@ -81,7 +81,7 @@ public class RefreshFixtureService : IRefreshFixtureService
     }
 
     private async Task GetFixturesAsync(CompetitionModel competition, IEnumerable<Competition> localCompetitions,
-        ConcurrentDictionary<int, Team> newTeams,
+        ConcurrentDictionary<long, Team> newTeams,
         ConcurrentDictionary<int, IList<Fixture>> newFixtures)
     {
         _logger.LogInformation($"Processing competition {competition.Name}");

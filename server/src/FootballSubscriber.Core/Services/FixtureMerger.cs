@@ -17,7 +17,7 @@ public class FixtureMerger : MergerBase<Fixture>
         _fixtureChangeNotificationService = fixtureChangeNotificationService;
     }
 
-    protected override int GetEntityComparableKey(Fixture entity)
+    protected override long GetEntityComparableKey(Fixture entity)
     {
         return entity.ApiId;
     }

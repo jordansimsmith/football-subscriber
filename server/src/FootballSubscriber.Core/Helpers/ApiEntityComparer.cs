@@ -16,6 +16,6 @@ public class ApiEntityComparer : IEqualityComparer<IApiEntity>
 
     public int GetHashCode(IApiEntity obj)
     {
-        return obj.ApiId;
+        return obj.ApiId.GetHashCode();
     }
 }

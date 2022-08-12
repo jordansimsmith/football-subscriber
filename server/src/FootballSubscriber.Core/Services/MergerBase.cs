@@ -61,7 +61,7 @@ public abstract class MergerBase<TEntity> : IMerger<TEntity> where TEntity : cla
         await OnMergeCompleteAsync();
     }
 
-    protected abstract int GetEntityComparableKey(TEntity entity);
+    protected abstract long GetEntityComparableKey(TEntity entity);
 
     protected abstract Task UpdateEntityAsync(TEntity oldEntity, TEntity newEntity);
 

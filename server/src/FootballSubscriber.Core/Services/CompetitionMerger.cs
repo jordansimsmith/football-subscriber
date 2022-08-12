@@ -13,7 +13,7 @@ public class CompetitionMerger : MergerBase<Competition>
         _competitionRepository = competitionRepository;
     }
 
-    protected override int GetEntityComparableKey(Competition entity)
+    protected override long GetEntityComparableKey(Competition entity)
     {
         return entity.ApiId;
     }

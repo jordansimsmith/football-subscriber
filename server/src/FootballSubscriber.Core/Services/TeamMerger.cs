@@ -13,7 +13,7 @@ public class TeamMerger : MergerBase<Team>
         _teamRepository = teamRepository;
     }
 
-    protected override int GetEntityComparableKey(Team entity)
+    protected override long GetEntityComparableKey(Team entity)
     {
         return entity.ApiId;
     }
