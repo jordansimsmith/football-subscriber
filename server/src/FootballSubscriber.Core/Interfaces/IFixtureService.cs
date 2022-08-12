@@ -7,8 +7,6 @@ namespace FootballSubscriber.Core.Interfaces;
 
 public interface IFixtureService
 {
-
-
     /// <summary>
     ///     Gets current fixtures for a competition and date range
     /// </summary>
@@ -16,5 +14,9 @@ public interface IFixtureService
     /// <param name="fromDate"></param>
     /// <param name="toDate"></param>
     /// <returns></returns>
-    Task<IEnumerable<Fixture>> GetFixturesAsync(int competitionId, DateTime fromDate, DateTime toDate);
+    Task<IEnumerable<Fixture>> GetFixturesAsync(
+        int competitionId,
+        DateTime fromDate,
+        DateTime toDate
+    );
 }

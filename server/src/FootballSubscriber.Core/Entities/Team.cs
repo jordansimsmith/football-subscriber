@@ -13,10 +13,14 @@ public class Team : IApiEntity
 
     public string Name { get; set; }
 
-    [JsonIgnore] public ICollection<Fixture> HomeFixtures { get; set; }
-    [JsonIgnore] public ICollection<Fixture> AwayFixtures { get; set; }
+    [JsonIgnore]
+    public ICollection<Fixture> HomeFixtures { get; set; }
 
-    [JsonIgnore] public ICollection<Subscription> Subscriptions { get; set; }
+    [JsonIgnore]
+    public ICollection<Fixture> AwayFixtures { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Subscription> Subscriptions { get; set; }
 
     /// <summary>
     ///     Third party unique identifier

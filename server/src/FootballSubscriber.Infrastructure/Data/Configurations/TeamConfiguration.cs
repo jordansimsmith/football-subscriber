@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FootballSubscriber.Infrastructure.Data.Configurations;
 
-public class TeamConfiguration: IEntityTypeConfiguration<Team>
+public class TeamConfiguration : IEntityTypeConfiguration<Team>
 {
     public void Configure(EntityTypeBuilder<Team> builder)
     {

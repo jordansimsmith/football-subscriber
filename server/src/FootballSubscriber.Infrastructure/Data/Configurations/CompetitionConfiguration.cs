@@ -13,8 +13,6 @@ public class CompetitionConfiguration : IEntityTypeConfiguration<Competition>
 
         builder.Property(o => o.Name).IsRequired();
 
-        builder
-            .HasMany(o => o.Fixtures)
-            .WithOne(o => o.Competition);
+        builder.HasMany(o => o.Fixtures).WithOne(o => o.Competition);
     }
 }

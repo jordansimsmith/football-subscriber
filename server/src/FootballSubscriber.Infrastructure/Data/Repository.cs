@@ -40,12 +40,16 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     public async Task<IEnumerable<TEntity>> FindAsync(
         Expression<Func<TEntity, bool>> filter,
         Expression<Func<TEntity, object>> orderBy,
-        params Expression<Func<TEntity, object>>[] includeProperties)
+        params Expression<Func<TEntity, object>>[] includeProperties
+    )
     {
         var query = _dbContext.Set<TEntity>().Where(filter);
         if (includeProperties != null && includeProperties.Any())
         {
-            query = includeProperties.Aggregate(query, (current, property) => current.Include(property));
+            query = includeProperties.Aggregate(
+                query,
+                (current, property) => current.Include(property)
+            );
         }
 
         query = query.OrderBy(orderBy);

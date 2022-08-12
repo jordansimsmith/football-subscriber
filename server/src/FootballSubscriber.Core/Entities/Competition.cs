@@ -4,7 +4,7 @@ using FootballSubscriber.Core.Interfaces;
 
 namespace FootballSubscriber.Core.Entities;
 
-public class Competition: IApiEntity
+public class Competition : IApiEntity
 {
     /// <summary>
     ///     Local unique identifier
@@ -18,5 +18,6 @@ public class Competition: IApiEntity
 
     public string Name { get; set; }
 
-    [JsonIgnore] public ICollection<Fixture> Fixtures { get; set; }
+    [JsonIgnore]
+    public ICollection<Fixture> Fixtures { get; set; }
 }

@@ -20,10 +20,7 @@ public class InfrastructureModule : Module
             .As<IFixtureApiService>()
             .InstancePerLifetimeScope();
 
-        builder
-            .RegisterType<EmailService>()
-            .As<IEmailService>()
-            .InstancePerLifetimeScope();
+        builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
 
         builder
             .RegisterType<HttpClientManagementConnection>()

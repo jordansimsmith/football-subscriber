@@ -34,32 +34,42 @@ public class FixtureApiService : IFixtureApiService
         var stringContent = new StringContent(
             JsonConvert.SerializeObject(payload),
             Encoding.UTF8,
-            MediaTypeNames.Application.Json);
-        var getCompetitionsUri = new Uri($"{_configuration["FixtureApi:BaseAddress"]}/competitionsfromids");
+            MediaTypeNames.Application.Json
+        );
+        var getCompetitionsUri = new Uri(
+            $"{_configuration["FixtureApi:BaseAddress"]}/competitionsfromids"
+        );
         var response = await _httpClient.PostAsync(getCompetitionsUri, stringContent);
 
-        if (!response.IsSuccessStatusCode) throw new SystemException("Could not get competitions");
+        if (!response.IsSuccessStatusCode)
+            throw new SystemException("Could not get competitions");
 
         var content = await response.Content.ReadAsStringAsync();
         var competitions = JsonConvert.DeserializeObject<IEnumerable<CompetitionModel>>(content);
         return competitions;
     }
 
-    public async Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetitionAsync(int competitionId)
+    public async Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetitionAsync(
+        int competitionId
+    )
     {
-        var getOrganisationsUri =
-            new Uri($"{_configuration["FixtureApi:BaseAddress"]}/organisations?ids={competitionId}&season={_configuration["FixtureApi:SeasonId"]}");
+        var getOrganisationsUri = new Uri(
+            $"{_configuration["FixtureApi:BaseAddress"]}/organisations?ids={competitionId}&season={_configuration["FixtureApi:SeasonId"]}"
+        );
         var response = await _httpClient.GetAsync(getOrganisationsUri);
 
-        if (!response.IsSuccessStatusCode) throw new SystemException("Could not get organisations for competition");
+        if (!response.IsSuccessStatusCode)
+            throw new SystemException("Could not get organisations for competition");
 
         var content = await response.Content.ReadAsStringAsync();
         var organisations = JsonConvert.DeserializeObject<IEnumerable<OrganisationModel>>(content);
         return organisations;
     }
 
-    public async Task<GetFixturesResponseModel> GetFixturesForCompetitionAsync(int competitionId,
-        IEnumerable<int> organisationIds)
+    public async Task<GetFixturesResponseModel> GetFixturesForCompetitionAsync(
+        int competitionId,
+        IEnumerable<int> organisationIds
+    )
     {
         var payload = new
         {
@@ -76,12 +86,16 @@ public class FixtureApiService : IFixtureApiService
         var stringContent = new StringContent(
             JsonConvert.SerializeObject(payload),
             Encoding.UTF8,
-            MediaTypeNames.Application.Json);
+            MediaTypeNames.Application.Json
+        );
 
-        var getFixturesUri = new Uri($"{_configuration["FixtureApi:BaseAddress"]}/filteredfixtures");
+        var getFixturesUri = new Uri(
+            $"{_configuration["FixtureApi:BaseAddress"]}/filteredfixtures"
+        );
         var response = await _httpClient.PostAsync(getFixturesUri, stringContent);
 
-        if (!response.IsSuccessStatusCode) throw new SystemException("Could not get fixtures for competition");
+        if (!response.IsSuccessStatusCode)
+            throw new SystemException("Could not get fixtures for competition");
 
         var content = await response.Content.ReadAsStringAsync();
         var fixtures = JsonConvert.DeserializeObject<GetFixturesResponseModel>(content);

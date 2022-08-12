@@ -17,7 +17,7 @@ public class TeamMergerTest
     public TeamMergerTest()
     {
         _mockTeamRepository = new Mock<IRepository<Team>>();
-            
+
         _subject = new TeamMerger(_mockTeamRepository.Object);
     }
 
@@ -27,40 +27,16 @@ public class TeamMergerTest
         // arrange
         var oldTeams = new[]
         {
-            new Team
-            {
-                ApiId = 1,
-                Name = "name 1"
-            },
-            new Team
-            {
-                ApiId = 3,
-                Name = "name 3"
-            },
-            new Team
-            {
-                ApiId = 4,
-                Name = "name 4"
-            }
+            new Team { ApiId = 1, Name = "name 1" },
+            new Team { ApiId = 3, Name = "name 3" },
+            new Team { ApiId = 4, Name = "name 4" }
         };
 
         var newTeams = new[]
         {
-            new Team
-            {
-                ApiId = 1,
-                Name = "name 1 updated"
-            },
-            new Team
-            {
-                ApiId = 2,
-                Name = "name 2"
-            },
-            new Team
-            {
-                ApiId = 5,
-                Name = "name 5"
-            }
+            new Team { ApiId = 1, Name = "name 1 updated" },
+            new Team { ApiId = 2, Name = "name 2" },
+            new Team { ApiId = 5, Name = "name 5" }
         };
 
         // act

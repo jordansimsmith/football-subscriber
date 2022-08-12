@@ -6,7 +6,7 @@ namespace FootballSubscriber.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CompetitionsController: ControllerBase
+public class CompetitionsController : ControllerBase
 {
     private readonly ICompetitionService _competitionService;
 

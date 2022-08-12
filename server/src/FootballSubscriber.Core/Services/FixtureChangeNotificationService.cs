@@ -29,20 +29,27 @@ public class FixtureChangeNotificationService : IFixtureChangeNotificationServic
 
     public async Task NotifySubscribersAsync(Fixture oldFixture, Fixture newFixture)
     {
-        var subscriptions = (await _subscriptionRepository.FindAsync(
-            s => s.TeamId == oldFixture.HomeTeamId || s.TeamId == oldFixture.AwayTeamId, s => s.Id)).ToList();
+        var subscriptions = (
+            await _subscriptionRepository.FindAsync(
+                s => s.TeamId == oldFixture.HomeTeamId || s.TeamId == oldFixture.AwayTeamId,
+                s => s.Id
+            )
+        ).ToList();
 
         if (!subscriptions.Any())
         {
             _logger.LogInformation(
-                $"Fixture {newFixture.Id} changed but there were no subscribers to listen to it");
+                $"Fixture {newFixture.Id} changed but there were no subscribers to listen to it"
+            );
             return;
         }
 
         var userIds = subscriptions.Select(s => s.UserId).Distinct();
 
         _logger.LogInformation("Fetching subscriber user profiles");
-        var userProfiles = await Task.WhenAll(userIds.Select(u => _userProfileService.GetUserProfileAsync(u)));
+        var userProfiles = await Task.WhenAll(
+            userIds.Select(u => _userProfileService.GetUserProfileAsync(u))
+        );
         _logger.LogInformation("Successfully fetched subscriber user profiles");
 
         var fixtureChange = new FixtureChangeModel
@@ -58,8 +65,11 @@ public class FixtureChangeNotificationService : IFixtureChangeNotificationServic
         };
 
         _logger.LogInformation("Sending fixture change emails to subscribers");
-        await Task.WhenAll(userProfiles.Select(user =>
-            _emailService.SendFixtureChangeEmailAsync(user, fixtureChange)));
+        await Task.WhenAll(
+            userProfiles.Select(
+                user => _emailService.SendFixtureChangeEmailAsync(user, fixtureChange)
+            )
+        );
         _logger.LogInformation("Successfully sent fixture change emails to subscribers");
     }
 }

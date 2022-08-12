@@ -25,48 +25,53 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-builder.Host.ConfigureContainer<ContainerBuilder>((_, containerBuilder) =>
-{
-    containerBuilder.RegisterModule<CoreModule>();
-    containerBuilder.RegisterModule<InfrastructureModule>();
-    containerBuilder.RegisterAutoMapper(typeof(FixtureProfile).Assembly);
-});
+builder.Host.ConfigureContainer<ContainerBuilder>(
+    (_, containerBuilder) =>
+    {
+        containerBuilder.RegisterModule<CoreModule>();
+        containerBuilder.RegisterModule<InfrastructureModule>();
+        containerBuilder.RegisterAutoMapper(typeof(FixtureProfile).Assembly);
+    }
+);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo {Title = "FootballSubscriber.Api", Version = "v1"});
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please provide the bearer token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FootballSubscriber.Api", Version = "v1" });
+    c.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
+            In = ParameterLocation.Header,
+            Description = "Please provide the bearer token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
         }
-    });
+    );
+    c.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        }
+    );
 });
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", policy =>
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .WithExposedHeaders("location")
+    options.AddPolicy(
+        "CorsPolicy",
+        policy =>
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("location")
     );
 });
 
@@ -111,7 +116,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FootballSubscriber.Api v1"));
+    app.UseSwaggerUI(
+        c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FootballSubscriber.Api v1")
+    );
 }
 
 app.UseCors("CorsPolicy");
@@ -121,21 +128,28 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
-{
-    Authorization = new[]
+app.UseHangfireDashboard(
+    "/hangfire",
+    new DashboardOptions
     {
-        new HangfireDashboardFilter(app.Configuration["Hangfire:Username"], app.Configuration["Hangfire:Password"])
+        Authorization = new[]
+        {
+            new HangfireDashboardFilter(
+                app.Configuration["Hangfire:Username"],
+                app.Configuration["Hangfire:Password"]
+            )
+        }
     }
-});
+);
 
-app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
-GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute
+app.UseEndpoints(endpoints =>
 {
-    Attempts = 0,
-    OnAttemptsExceeded = AttemptsExceededAction.Fail
+    endpoints.MapControllers();
 });
+
+GlobalJobFilters.Filters.Add(
+    new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Fail }
+);
 RecurringJob.AddOrUpdate<IRefreshFixtureService>(x => x.RefreshFixturesAsync(), "*/15 * * * *");
 
 app.Run();

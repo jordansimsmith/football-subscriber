@@ -22,8 +22,10 @@ public class SubscriptionsController : ControllerBase
     [HttpPost("")]
     public async Task<ActionResult> CreateSubscriptionAsync(SubscriptionModel subscriptionModel)
     {
-        var subscription =
-            await _subscriptionService.CreateSubscriptionAsync(subscriptionModel.TeamId, User.Identity?.Name);
+        var subscription = await _subscriptionService.CreateSubscriptionAsync(
+            subscriptionModel.TeamId,
+            User.Identity?.Name
+        );
         var location = new Uri($"/subscriptions/{subscription.Id}");
         return Created(location, subscription);
     }
@@ -31,7 +33,7 @@ public class SubscriptionsController : ControllerBase
     [HttpGet("")]
     public async Task<ActionResult> GetSubscriptionsAsync()
     {
-        var subscriptions =  await _subscriptionService.GetSubscriptionsAsync(User.Identity?.Name);
+        var subscriptions = await _subscriptionService.GetSubscriptionsAsync(User.Identity?.Name);
         return Ok(subscriptions);
     }
 

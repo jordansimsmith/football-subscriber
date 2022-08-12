@@ -8,11 +8,17 @@ public static class ServiceExtensions
 {
     public static void AddDbContext(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<FootballSubscriberContext>(options => { options.UseNpgsql(connectionString); });
+        services.AddDbContext<FootballSubscriberContext>(options =>
+        {
+            options.UseNpgsql(connectionString);
+        });
     }
 
     public static void AddHangfireContext(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<HangfireContext>(options => { options.UseNpgsql(connectionString); });
+        services.AddDbContext<HangfireContext>(options =>
+        {
+            options.UseNpgsql(connectionString);
+        });
     }
 }

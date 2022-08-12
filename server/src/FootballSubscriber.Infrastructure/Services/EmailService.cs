@@ -17,13 +17,18 @@ public class EmailService : IEmailService
         _configuration = configuration;
     }
 
-    public async Task SendFixtureChangeEmailAsync(UserProfile user, FixtureChangeModel fixtureChange)
+    public async Task SendFixtureChangeEmailAsync(
+        UserProfile user,
+        FixtureChangeModel fixtureChange
+    )
     {
         var apiKey = _configuration["SendGrid:ApiKey"];
         var client = new SendGridClient(apiKey);
 
-        var sender = new EmailAddress(_configuration["SendGrid:SenderAddress"],
-            _configuration["SendGrid:SenderName"]);
+        var sender = new EmailAddress(
+            _configuration["SendGrid:SenderAddress"],
+            _configuration["SendGrid:SenderName"]
+        );
         var templateId = _configuration["SendGrid:FixtureChangeTemplateId"];
 
         var recipient = new EmailAddress(user.Email, user.Name);
@@ -45,11 +50,7 @@ public class EmailService : IEmailService
             OldVenue = fixtureChange.OldVenue
         };
 
-        var msg = new SendGridMessage
-        {
-            From = sender,
-            TemplateId = templateId
-        };
+        var msg = new SendGridMessage { From = sender, TemplateId = templateId };
         msg.AddTo(recipient);
         msg.SetTemplateData(templateData);
         await client.SendEmailAsync(msg).ConfigureAwait(false);

@@ -10,8 +10,10 @@ public class FixtureMerger : MergerBase<Fixture>
     private readonly IFixtureChangeNotificationService _fixtureChangeNotificationService;
     private readonly IRepository<Fixture> _fixtureRepository;
 
-    public FixtureMerger(IRepository<Fixture> fixtureRepository,
-        IFixtureChangeNotificationService fixtureChangeNotificationService)
+    public FixtureMerger(
+        IRepository<Fixture> fixtureRepository,
+        IFixtureChangeNotificationService fixtureChangeNotificationService
+    )
     {
         _fixtureRepository = fixtureRepository;
         _fixtureChangeNotificationService = fixtureChangeNotificationService;
@@ -25,8 +27,11 @@ public class FixtureMerger : MergerBase<Fixture>
     protected override async Task UpdateEntityAsync(Fixture oldFixture, Fixture newFixture)
     {
         // important changes to the fixture
-        if (newFixture.Date < DateTime.UtcNow.AddDays(7) && newFixture.Date > DateTime.UtcNow &&
-            (oldFixture.Date != newFixture.Date || oldFixture.VenueId != newFixture.VenueId))
+        if (
+            newFixture.Date < DateTime.UtcNow.AddDays(7)
+            && newFixture.Date > DateTime.UtcNow
+            && (oldFixture.Date != newFixture.Date || oldFixture.VenueId != newFixture.VenueId)
+        )
         {
             // notify subscribers
             await _fixtureChangeNotificationService.NotifySubscribersAsync(oldFixture, newFixture);

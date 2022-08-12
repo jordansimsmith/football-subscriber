@@ -78,7 +78,8 @@ public class RefreshFixtureServiceTest
                 SportName = "Football"
             }
         };
-        _mockFixtureApiService.Setup(x => x.GetCompetitionsAsync())
+        _mockFixtureApiService
+            .Setup(x => x.GetCompetitionsAsync())
             .ReturnsAsync(competitionModels)
             .Verifiable();
 
@@ -91,7 +92,8 @@ public class RefreshFixtureServiceTest
                 Provider = 0
             }
         };
-        _mockFixtureApiService.Setup(x => x.GetOrganisationsForCompetitionAsync(It.IsAny<int>()))
+        _mockFixtureApiService
+            .Setup(x => x.GetOrganisationsForCompetitionAsync(It.IsAny<int>()))
             .ReturnsAsync(organisationModels)
             .Verifiable();
 
@@ -132,48 +134,40 @@ public class RefreshFixtureServiceTest
             RoundInfo = Array.Empty<RoundModel>()
         };
         _mockFixtureApiService
-            .Setup(x => x.GetFixturesForCompetitionAsync(It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))
+            .Setup(
+                x => x.GetFixturesForCompetitionAsync(It.IsAny<int>(), It.IsAny<IEnumerable<int>>())
+            )
             .ReturnsAsync(fixtures)
             .Verifiable();
 
         _mockFixtureRepository
-            .Setup(x => x.FindAsync(It.IsAny<Expression<Func<Fixture, bool>>>(),
-                It.IsAny<Expression<Func<Fixture, object>>>()))
+            .Setup(
+                x =>
+                    x.FindAsync(
+                        It.IsAny<Expression<Func<Fixture, bool>>>(),
+                        It.IsAny<Expression<Func<Fixture, object>>>()
+                    )
+            )
             .ReturnsAsync(Enumerable.Empty<Fixture>())
             .Verifiable();
 
         var teams = new[]
         {
-            new Team
-            {
-                ApiId = 11,
-                Name = "Team 11"
-            },
-            new Team
-            {
-                ApiId = 21,
-                Name = "Team 21"
-            },
-            new Team
-            {
-                ApiId = 31,
-                Name = "Team 31"
-            },
-            new Team
-            {
-                ApiId = 41,
-                Name = "Team 41"
-            },
-            new Team
-            {
-                ApiId = 51,
-                Name = "Team 1"
-            }
+            new Team { ApiId = 11, Name = "Team 11" },
+            new Team { ApiId = 21, Name = "Team 21" },
+            new Team { ApiId = 31, Name = "Team 31" },
+            new Team { ApiId = 41, Name = "Team 41" },
+            new Team { ApiId = 51, Name = "Team 1" }
         };
 
         _mockTeamRepository
-            .Setup(x => x.FindAsync(It.IsAny<Expression<Func<Team, bool>>>(),
-                It.IsAny<Expression<Func<Team, object>>>()))
+            .Setup(
+                x =>
+                    x.FindAsync(
+                        It.IsAny<Expression<Func<Team, bool>>>(),
+                        It.IsAny<Expression<Func<Team, object>>>()
+                    )
+            )
             .ReturnsAsync(teams)
             .Verifiable();
 
@@ -187,8 +181,13 @@ public class RefreshFixtureServiceTest
             }
         };
         _mockCompetitionRepository
-            .Setup(x => x.FindAsync(It.IsAny<Expression<Func<Competition, bool>>>(),
-                It.IsAny<Expression<Func<Competition, object>>>()))
+            .Setup(
+                x =>
+                    x.FindAsync(
+                        It.IsAny<Expression<Func<Competition, bool>>>(),
+                        It.IsAny<Expression<Func<Competition, object>>>()
+                    )
+            )
             .ReturnsAsync(localCompetitions)
             .Verifiable();
 
@@ -197,11 +196,17 @@ public class RefreshFixtureServiceTest
 
         // assert
         _mockCompetitionMerger.Verify(
-            x => x.MergeAsync(It.IsAny<IList<Competition>>(), It.IsAny<IList<Competition>>()), Times.Once);
-        _mockFixtureMerger.Verify(x => x.MergeAsync(It.IsAny<IList<Fixture>>(), It.IsAny<IList<Fixture>>()),
-            Times.Once);
-        _mockTeamMerger.Verify(x =>
-            x.MergeAsync(It.IsAny<IList<Team>>(), It.Is<IList<Team>>(t => t.Count == 5)), Times.Once);
+            x => x.MergeAsync(It.IsAny<IList<Competition>>(), It.IsAny<IList<Competition>>()),
+            Times.Once
+        );
+        _mockFixtureMerger.Verify(
+            x => x.MergeAsync(It.IsAny<IList<Fixture>>(), It.IsAny<IList<Fixture>>()),
+            Times.Once
+        );
+        _mockTeamMerger.Verify(
+            x => x.MergeAsync(It.IsAny<IList<Team>>(), It.Is<IList<Team>>(t => t.Count == 5)),
+            Times.Once
+        );
 
         _mockFixtureApiService.Verify();
         _mockCompetitionRepository.Verify();

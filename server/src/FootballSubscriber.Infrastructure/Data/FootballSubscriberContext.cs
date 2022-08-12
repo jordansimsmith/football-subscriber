@@ -5,9 +5,8 @@ namespace FootballSubscriber.Infrastructure.Data;
 
 public class FootballSubscriberContext : DbContext
 {
-    public FootballSubscriberContext(DbContextOptions<FootballSubscriberContext> options) : base(options)
-    {
-    }
+    public FootballSubscriberContext(DbContextOptions<FootballSubscriberContext> options)
+        : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

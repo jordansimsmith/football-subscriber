@@ -15,10 +15,15 @@ public class FixtureService : IFixtureService
         _fixtureRepository = fixtureRepository;
     }
 
-    public Task<IEnumerable<Fixture>> GetFixturesAsync(int competitionId, DateTime fromDate, DateTime toDate)
+    public Task<IEnumerable<Fixture>> GetFixturesAsync(
+        int competitionId,
+        DateTime fromDate,
+        DateTime toDate
+    )
     {
         return _fixtureRepository.FindAsync(
             c => c.CompetitionId == competitionId && c.Date >= fromDate && c.Date <= toDate,
-            c => c.ApiId);
+            c => c.ApiId
+        );
     }
 }

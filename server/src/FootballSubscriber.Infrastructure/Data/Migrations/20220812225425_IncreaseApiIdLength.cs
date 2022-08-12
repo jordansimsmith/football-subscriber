@@ -14,7 +14,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "bigint",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<long>(
                 name: "HomeTeamApiId",
@@ -22,7 +23,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "bigint",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<long>(
                 name: "CompetitionApiId",
@@ -30,7 +32,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "bigint",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<long>(
                 name: "AwayTeamApiId",
@@ -38,7 +41,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "bigint",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<long>(
                 name: "ApiId",
@@ -46,7 +50,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "bigint",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<long>(
                 name: "ApiId",
@@ -54,7 +59,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "bigint",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -65,7 +71,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(long),
-                oldType: "bigint");
+                oldType: "bigint"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "HomeTeamApiId",
@@ -73,7 +80,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(long),
-                oldType: "bigint");
+                oldType: "bigint"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "CompetitionApiId",
@@ -81,7 +89,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(long),
-                oldType: "bigint");
+                oldType: "bigint"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "AwayTeamApiId",
@@ -89,7 +98,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(long),
-                oldType: "bigint");
+                oldType: "bigint"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "ApiId",
@@ -97,7 +107,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(long),
-                oldType: "bigint");
+                oldType: "bigint"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "ApiId",
@@ -105,7 +116,8 @@ namespace FootballSubscriber.Infrastructure.Data.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(long),
-                oldType: "bigint");
+                oldType: "bigint"
+            );
         }
     }
 }

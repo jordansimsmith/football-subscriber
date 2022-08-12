@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FootballSubscriber.Infrastructure.Data.Configurations;
 
-public class FixtureConfiguration: IEntityTypeConfiguration<Fixture>
+public class FixtureConfiguration : IEntityTypeConfiguration<Fixture>
 {
     public void Configure(EntityTypeBuilder<Fixture> builder)
     {
@@ -17,7 +17,7 @@ public class FixtureConfiguration: IEntityTypeConfiguration<Fixture>
         builder.Property(o => o.HomeTeamName).IsRequired();
         builder.Property(o => o.HomeOrganisationId).IsRequired();
         builder.Property(o => o.HomeOrganisationLogo);
-            
+
         builder.Property(o => o.AwayTeamId).IsRequired();
         builder.Property(o => o.AwayTeamName).IsRequired();
         builder.Property(o => o.AwayOrganisationId).IsRequired();

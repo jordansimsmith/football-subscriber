@@ -17,7 +17,7 @@ public class CompetitionMergerTest
     public CompetitionMergerTest()
     {
         _mockCompetitionRepository = new Mock<IRepository<Competition>>();
-            
+
         _subject = new CompetitionMerger(_mockCompetitionRepository.Object);
     }
 
@@ -27,50 +27,38 @@ public class CompetitionMergerTest
         // arrange
         var oldCompetitions = new[]
         {
-            new Competition
-            {
-                ApiId = 1,
-                Name = "name 1"
-            },
-            new Competition
-            {
-                ApiId = 3,
-                Name = "name 3"
-            },
-            new Competition
-            {
-                ApiId = 4,
-                Name = "name 4"
-            }
+            new Competition { ApiId = 1, Name = "name 1" },
+            new Competition { ApiId = 3, Name = "name 3" },
+            new Competition { ApiId = 4, Name = "name 4" }
         };
 
         var newCompetitions = new[]
         {
-            new Competition
-            {
-                ApiId = 1,
-                Name = "name 1 updated"
-            },
-            new Competition
-            {
-                ApiId = 2,
-                Name = "name 2"
-            },
-            new Competition
-            {
-                ApiId = 5,
-                Name = "name 5"
-            }
+            new Competition { ApiId = 1, Name = "name 1 updated" },
+            new Competition { ApiId = 2, Name = "name 2" },
+            new Competition { ApiId = 5, Name = "name 5" }
         };
 
         // act
         await _subject.MergeAsync(oldCompetitions, newCompetitions);
 
         // assert
-        _mockCompetitionRepository.Verify(x => x.AddAsync(It.Is<Competition>(c => c.ApiId == 2)), Times.Once);
-        _mockCompetitionRepository.Verify(x => x.Remove(It.Is<Competition>(c => c.ApiId == 3)), Times.Once);
-        _mockCompetitionRepository.Verify(x => x.Remove(It.Is<Competition>(c => c.ApiId == 4)), Times.Once);
-        _mockCompetitionRepository.Verify(x => x.AddAsync(It.Is<Competition>(c => c.ApiId == 5)), Times.Once);
+        _mockCompetitionRepository.Verify(
+            x => x.AddAsync(It.Is<Competition>(c => c.ApiId == 2)),
+            Times.Once
+        );
+        _mockCompetitionRepository.Verify(
+            x => x.Remove(It.Is<Competition>(c => c.ApiId == 3)),
+            Times.Once
+        );
+        _mockCompetitionRepository.Verify(
+            x => x.Remove(It.Is<Competition>(c => c.ApiId == 4)),
+            Times.Once
+        );
+        _mockCompetitionRepository.Verify(
+            x => x.AddAsync(It.Is<Competition>(c => c.ApiId == 5)),
+            Times.Once
+        );
 
         _mockCompetitionRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
 

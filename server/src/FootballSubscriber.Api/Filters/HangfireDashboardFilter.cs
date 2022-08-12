@@ -35,14 +35,18 @@ public class HangfireDashboardFilter : IDashboardAuthorizationFilter
 
             var authValues = AuthenticationHeaderValue.Parse(header);
 
-            var isBasicAuthentication =
-                "Basic".Equals(authValues.Scheme, StringComparison.InvariantCultureIgnoreCase);
+            var isBasicAuthentication = "Basic".Equals(
+                authValues.Scheme,
+                StringComparison.InvariantCultureIgnoreCase
+            );
             if (!isBasicAuthentication)
             {
                 return SetChallengeResponse(httpContext);
             }
 
-            var parameter = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(authValues.Parameter));
+            var parameter = System.Text.Encoding.UTF8.GetString(
+                Convert.FromBase64String(authValues.Parameter)
+            );
             var parts = parameter.Split(':');
 
             var username = parts[0];

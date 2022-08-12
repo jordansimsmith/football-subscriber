@@ -17,7 +17,6 @@ public class FixtureChangeNotificationServiceTest
     private readonly Mock<IRepository<Subscription>> _mockSubscriptionRepository;
     private readonly Mock<IUserProfileService> _mockUserProfileService;
 
-
     private readonly FixtureChangeNotificationService _subject;
 
     public FixtureChangeNotificationServiceTest()
@@ -39,33 +38,25 @@ public class FixtureChangeNotificationServiceTest
     {
         // arrange
         var newFixture = new Fixture();
-        var oldFixture = new Fixture
-        {
-            HomeTeamId = 1,
-            AwayTeamId = 2
-        };
+        var oldFixture = new Fixture { HomeTeamId = 1, AwayTeamId = 2 };
 
-        var subscriptions = new[]
-        {
-            new Subscription
-            {
-                UserId = "user 1"
-            }
-        };
+        var subscriptions = new[] { new Subscription { UserId = "user 1" } };
 
-        var userProfile = new UserProfile
-        {
-            Email = "user1@user1.com",
-            Name = "user 1"
-        };
+        var userProfile = new UserProfile { Email = "user1@user1.com", Name = "user 1" };
 
         _mockSubscriptionRepository
-            .Setup(x => x.FindAsync(It.IsAny<Expression<Func<Subscription, bool>>>(),
-                It.IsAny<Expression<Func<Subscription, object>>>()))
+            .Setup(
+                x =>
+                    x.FindAsync(
+                        It.IsAny<Expression<Func<Subscription, bool>>>(),
+                        It.IsAny<Expression<Func<Subscription, object>>>()
+                    )
+            )
             .ReturnsAsync(subscriptions)
             .Verifiable();
 
-        _mockUserProfileService.Setup(x => x.GetUserProfileAsync("user 1"))
+        _mockUserProfileService
+            .Setup(x => x.GetUserProfileAsync("user 1"))
             .ReturnsAsync(userProfile)
             .Verifiable();
 
@@ -75,6 +66,8 @@ public class FixtureChangeNotificationServiceTest
         // assert
         _mockSubscriptionRepository.Verify();
         _mockUserProfileService.Verify();
-        _mockEmailService.Verify(x => x.SendFixtureChangeEmailAsync(userProfile, It.IsAny<FixtureChangeModel>()));
+        _mockEmailService.Verify(
+            x => x.SendFixtureChangeEmailAsync(userProfile, It.IsAny<FixtureChangeModel>())
+        );
     }
 }

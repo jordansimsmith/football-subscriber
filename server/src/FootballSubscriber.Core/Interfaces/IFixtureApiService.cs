@@ -25,5 +25,8 @@ public interface IFixtureApiService
     /// <param name="competitionId"></param>
     /// <param name="organisationIds"></param>
     /// <returns></returns>
-    Task<GetFixturesResponseModel> GetFixturesForCompetitionAsync(int competitionId, IEnumerable<int> organisationIds);
+    Task<GetFixturesResponseModel> GetFixturesForCompetitionAsync(
+        int competitionId,
+        IEnumerable<int> organisationIds
+    );
 }
