@@ -18,7 +18,6 @@ public static class ServiceExtensions
         services.AddScoped<IFixtureChangeNotificationService, FixtureChangeNotificationService>();
 
         services.AddScoped<IMerger<Competition>, CompetitionMerger>();
-        services.AddScoped<IMerger<Team>, TeamMerger>();
         services.AddScoped<IMerger<Fixture>, FixtureMerger>();
 
         services.AddAutoMapper(typeof(FixtureProfile));

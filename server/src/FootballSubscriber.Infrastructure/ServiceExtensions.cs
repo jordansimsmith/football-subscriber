@@ -31,7 +31,6 @@ public static class ServiceExtensions
         services.AddScoped<IRepository<Competition>, Repository<Competition>>();
         services.AddScoped<IRepository<Fixture>, Repository<Fixture>>();
         services.AddScoped<IRepository<Subscription>, Repository<Subscription>>();
-        services.AddScoped<IRepository<Team>, Repository<Team>>();
 
         services.AddScoped<IFixtureApiService, FixtureApiService>();
         services.AddScoped<IEmailService, EmailService>();

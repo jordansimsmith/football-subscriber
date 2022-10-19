@@ -23,7 +23,7 @@ public class SubscriptionsController : ControllerBase
     public async Task<ActionResult> CreateSubscriptionAsync(SubscriptionModel subscriptionModel)
     {
         var subscription = await _subscriptionService.CreateSubscriptionAsync(
-            subscriptionModel.TeamId,
+            subscriptionModel.TeamName,
             User.Identity?.Name
         );
         var location = new Uri($"/subscriptions/{subscription.Id}");

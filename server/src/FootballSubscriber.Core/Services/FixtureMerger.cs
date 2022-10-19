@@ -30,32 +30,28 @@ public class FixtureMerger : MergerBase<Fixture>
         if (
             newFixture.Date < DateTime.UtcNow.AddDays(7)
             && newFixture.Date > DateTime.UtcNow
-            && (oldFixture.Date != newFixture.Date || oldFixture.VenueId != newFixture.VenueId)
+            && (oldFixture.Date != newFixture.Date || oldFixture.VenueName != newFixture.VenueName)
         )
         {
             // notify subscribers
             await _fixtureChangeNotificationService.NotifySubscribersAsync(oldFixture, newFixture);
         }
 
-        oldFixture.CompetitionApiId = oldFixture.CompetitionApiId;
-        oldFixture.Competition = oldFixture.Competition;
-
-        oldFixture.HomeTeamApiId = newFixture.HomeTeamApiId;
         oldFixture.HomeTeamName = newFixture.HomeTeamName;
-        oldFixture.HomeTeam = newFixture.HomeTeam;
-        oldFixture.HomeOrganisationId = newFixture.HomeOrganisationId;
         oldFixture.HomeOrganisationLogo = newFixture.HomeOrganisationLogo;
+        oldFixture.HomeScore = newFixture.HomeScore;
 
-        oldFixture.AwayTeamApiId = newFixture.HomeTeamApiId;
         oldFixture.AwayTeamName = newFixture.AwayTeamName;
-        oldFixture.AwayTeam = newFixture.AwayTeam;
-        oldFixture.AwayOrganisationId = newFixture.AwayOrganisationId;
         oldFixture.AwayOrganisationLogo = newFixture.AwayOrganisationLogo;
+        oldFixture.AwayScore = newFixture.AwayScore;
 
         oldFixture.Date = newFixture.Date;
-        oldFixture.VenueId = newFixture.VenueId;
+        oldFixture.Status = newFixture.Status;
+        
         oldFixture.VenueName = newFixture.VenueName;
         oldFixture.Address = newFixture.Address;
+        oldFixture.Longitude = newFixture.Longitude;
+        oldFixture.Latitude = newFixture.Latitude;
     }
 
     protected override async Task InsertEntityAsync(Fixture newEntity)

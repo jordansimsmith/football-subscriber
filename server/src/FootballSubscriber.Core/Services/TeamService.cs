@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FootballSubscriber.Core.Entities;
 using FootballSubscriber.Core.Interfaces;
@@ -7,15 +8,18 @@ namespace FootballSubscriber.Core.Services;
 
 public class TeamService : ITeamService
 {
-    private readonly IRepository<Team> _teamRepository;
+    private readonly IRepository<Fixture> _fixtureRepository;
 
-    public TeamService(IRepository<Team> teamRepository)
+    public TeamService(IRepository<Fixture> fixtureRepository)
     {
-        _teamRepository = teamRepository;
+        _fixtureRepository = fixtureRepository;
     }
 
-    public async Task<IEnumerable<Team>> GetTeamsAsync()
+    public async Task<IEnumerable<string>> GetTeamsAsync()
     {
-        return await _teamRepository.FindAsync(t => true, t => t.ApiId);
+        return (await _fixtureRepository.FindAsync(f => true, f => f.Id))
+            .SelectMany(f => new[] { f.HomeTeamName, f.AwayTeamName })
+            .Distinct()
+            .ToArray();
     }
 }

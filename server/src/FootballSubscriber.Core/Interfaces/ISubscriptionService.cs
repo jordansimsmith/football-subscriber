@@ -9,10 +9,10 @@ public interface ISubscriptionService
     /// <summary>
     ///     Creates a new subscription fr
     /// </summary>
-    /// <param name="teamId"></param>
+    /// <param name="teamName"></param>
     /// <param name="userId"></param>
     /// <returns></returns>
-    Task<Subscription> CreateSubscriptionAsync(int teamId, string userId);
+    Task<Subscription> CreateSubscriptionAsync(string teamName, string userId);
 
     /// <summary>
     ///     Gets the subscriptions for the current user

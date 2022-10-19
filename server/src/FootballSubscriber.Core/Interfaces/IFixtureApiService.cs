@@ -17,7 +17,7 @@ public interface IFixtureApiService
     /// </summary>
     /// <param name="competitionId"></param>
     /// <returns></returns>
-    Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetitionAsync(int competitionId);
+    Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetitionAsync(long competitionId);
 
     /// <summary>
     /// Gets the list of fixtures for a competition from the auckland football API
@@ -26,7 +26,7 @@ public interface IFixtureApiService
     /// <param name="organisationIds"></param>
     /// <returns></returns>
     Task<GetFixturesResponseModel> GetFixturesForCompetitionAsync(
-        int competitionId,
+        long competitionId,
         IEnumerable<int> organisationIds
     );
 }

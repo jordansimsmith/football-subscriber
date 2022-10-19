@@ -38,7 +38,7 @@ public class FixtureChangeNotificationServiceTest
     {
         // arrange
         var newFixture = new Fixture();
-        var oldFixture = new Fixture { HomeTeamId = 1, AwayTeamId = 2 };
+        var oldFixture = new Fixture { HomeTeamName = "1", AwayTeamName = "2" };
 
         var subscriptions = new[] { new Subscription { UserId = "user 1" } };
 

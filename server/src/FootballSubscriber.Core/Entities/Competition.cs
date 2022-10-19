@@ -14,6 +14,7 @@ public class Competition : IApiEntity
     /// <summary>
     ///     Third party unique identifier
     /// </summary>
+    [JsonIgnore]
     public long ApiId { get; set; }
 
     public string Name { get; set; }

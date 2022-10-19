@@ -20,8 +20,6 @@ public class RefreshFixtureService : IRefreshFixtureService
     private readonly IRepository<Fixture> _fixtureRepository;
     private readonly ILogger<RefreshFixtureService> _logger;
     private readonly IMapper _mapper;
-    private readonly IMerger<Team> _teamMerger;
-    private readonly IRepository<Team> _teamRepository;
 
     public RefreshFixtureService(
         IFixtureApiService fixtureApiService,
@@ -30,9 +28,7 @@ public class RefreshFixtureService : IRefreshFixtureService
         IMerger<Fixture> fixtureMerger,
         IMerger<Competition> competitionMerger,
         IMapper mapper,
-        ILogger<RefreshFixtureService> logger,
-        IRepository<Team> teamRepository,
-        IMerger<Team> teamMerger
+        ILogger<RefreshFixtureService> logger
     )
     {
         _fixtureApiService = fixtureApiService;
@@ -42,8 +38,6 @@ public class RefreshFixtureService : IRefreshFixtureService
         _competitionMerger = competitionMerger;
         _mapper = mapper;
         _logger = logger;
-        _teamRepository = teamRepository;
-        _teamMerger = teamMerger;
     }
 
     public async Task RefreshFixturesAsync()
@@ -58,60 +52,44 @@ public class RefreshFixtureService : IRefreshFixtureService
         var localCompetitions = await _competitionRepository.FindAsync(c => true, f => f.ApiId);
         _logger.LogInformation("Retrieved competitions");
 
-        // key: ApiId, value: Team
-        var newTeams = new ConcurrentDictionary<long, Team>();
-        // key: competitionId, value: List of fixtures
-        var newFixtures = new ConcurrentDictionary<int, IList<Fixture>>();
+        // key: competitionApiId, value: List of fixtures
+        var newFixtures = new ConcurrentDictionary<long, IList<Fixture>>();
 
         // get fixtures in parallel
         await Task.WhenAll(
-            newCompetitions.Select(
-                c => GetFixturesAsync(c, localCompetitions, newTeams, newFixtures)
-            )
+            newCompetitions.Select(c => GetFixturesAsync(c, localCompetitions, newFixtures))
         );
 
-        // ensure database has up to date teams
-        await UpdateTeamsAsync(newTeams.Values);
-        var localTeams = (await _teamRepository.FindAsync(t => true, t => t.ApiId)).ToList();
-
         // set relationships between teams and fixtures
-        foreach (var (competitionId, fixtures) in newFixtures)
+        foreach (var (competitionApiId, fixtures) in newFixtures)
         {
-            foreach (var fixture in fixtures)
-            {
-                fixture.HomeTeam = localTeams.First(t => t.ApiId == fixture.HomeTeamApiId);
-                fixture.AwayTeam = localTeams.First(t => t.ApiId == fixture.AwayTeamApiId);
-            }
-
-            await UpdateFixturesForCompetitionAsync(fixtures, competitionId);
+            await UpdateFixturesForCompetitionAsync(fixtures, competitionApiId);
         }
     }
 
     private async Task GetFixturesAsync(
         CompetitionModel competition,
         IEnumerable<Competition> localCompetitions,
-        ConcurrentDictionary<long, Team> newTeams,
-        ConcurrentDictionary<int, IList<Fixture>> newFixtures
+        ConcurrentDictionary<long, IList<Fixture>> newFixtures
     )
     {
         // get organisations for the competition from the API
-        var competitionId = int.Parse(competition.Id);
         var organisations = await _fixtureApiService.GetOrganisationsForCompetitionAsync(
-            competitionId
+            competition.Id
         );
         var organisationIds = organisations.Select(o => int.Parse(o.Id));
 
         // get fixtures for the competition from the API
         var fixturesResponse = await _fixtureApiService.GetFixturesForCompetitionAsync(
-            competitionId,
+            competition.Id,
             organisationIds
         );
         var fixtures = fixturesResponse.Fixtures
             .Select(f =>
             {
                 var fixture = _mapper.Map<FixtureModel, Fixture>(f);
-                fixture.CompetitionApiId = competitionId;
-                fixture.Competition = localCompetitions.First(c => c.ApiId == competitionId);
+                fixture.CompetitionApiId = competition.Id;
+                fixture.Competition = localCompetitions.First(c => c.ApiId == competition.Id);
 
                 // date from api is NZST but does not have any TZ info attached
                 // we want to handle and store the dates in UTC on the server, and let the client convert back when retreiving
@@ -126,23 +104,7 @@ public class RefreshFixtureService : IRefreshFixtureService
             })
             .ToList();
 
-        // extract teams from the fixture information
-        foreach (var fixture in fixtures)
-        {
-            newTeams[fixture.HomeTeamApiId] = new Team
-            {
-                ApiId = fixture.HomeTeamApiId,
-                Name = fixture.HomeTeamName
-            };
-
-            newTeams[fixture.AwayTeamApiId] = new Team
-            {
-                ApiId = fixture.AwayTeamApiId,
-                Name = fixture.AwayTeamName
-            };
-        }
-
-        newFixtures[competitionId] = fixtures;
+        newFixtures[competition.Id] = fixtures;
     }
 
     private async Task UpdateCompetitionsAsync(IEnumerable<Competition> competitions)
@@ -157,25 +119,17 @@ public class RefreshFixtureService : IRefreshFixtureService
 
     private async Task UpdateFixturesForCompetitionAsync(
         IEnumerable<Fixture> fixtures,
-        int competitionId
+        long competitionApiId
     )
     {
         var oldFixtures = (
             await _fixtureRepository.FindAsync(
-                f => f.CompetitionApiId == competitionId,
+                f => f.CompetitionApiId == competitionApiId,
                 f => f.ApiId
             )
         ).ToList();
         var newFixtures = fixtures.OrderBy(f => f.ApiId).ToList();
 
         await _fixtureMerger.MergeAsync(oldFixtures, newFixtures);
-    }
-
-    private async Task UpdateTeamsAsync(IEnumerable<Team> teams)
-    {
-        var oldTeams = (await _teamRepository.FindAsync(f => true, f => f.ApiId)).ToList();
-        var newTeams = teams.OrderBy(f => f.ApiId).ToList();
-
-        await _teamMerger.MergeAsync(oldTeams, newTeams);
     }
 }

@@ -12,9 +12,10 @@ public class FixtureProfile : Profile
         CreateMap<FixtureModel, Fixture>()
             .ForMember(o => o.Id, cfg => cfg.Ignore())
             .ForMember(o => o.ApiId, cfg => cfg.MapFrom(o => o.Id))
-            .ForMember(o => o.HomeTeamId, cfg => cfg.Ignore())
-            .ForMember(o => o.AwayTeamId, cfg => cfg.Ignore())
-            .ForMember(o => o.HomeTeamApiId, cfg => cfg.MapFrom(o => o.HomeTeamId))
-            .ForMember(o => o.AwayTeamApiId, cfg => cfg.MapFrom(o => o.AwayTeamId));
+            .ForMember(o => o.CompetitionId, cfg => cfg.Ignore())
+            .ForMember(o => o.HomeTeamName, cfg => cfg.MapFrom(o => o.HomeTeamNameAbbr))
+            .ForMember(o => o.HomeOrganisationLogo, cfg => cfg.MapFrom(o => o.HomeOrgLogo))
+            .ForMember(o => o.AwayTeamName, cfg => cfg.MapFrom(o => o.AwayTeamNameAbbr))
+            .ForMember(o => o.AwayOrganisationLogo, cfg => cfg.MapFrom(o => o.AwayOrgLogo));
     }
 }

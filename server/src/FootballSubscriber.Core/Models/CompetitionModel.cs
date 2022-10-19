@@ -2,7 +2,7 @@ namespace FootballSubscriber.Core.Models;
 
 public class CompetitionModel
 {
-    public string Id { get; set; }
+    public long Id { get; set; }
     public string Name { get; set; }
     public string OrganisationId { get; set; }
     public string OrganisationName { get; set; }

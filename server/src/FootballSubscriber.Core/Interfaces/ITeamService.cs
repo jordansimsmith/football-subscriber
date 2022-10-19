@@ -10,5 +10,5 @@ public interface ITeamService
     ///     Gets the list of teams
     /// </summary>
     /// <returns></returns>
-    Task<IEnumerable<Team>> GetTeamsAsync();
+    Task<IEnumerable<string>> GetTeamsAsync();
 }

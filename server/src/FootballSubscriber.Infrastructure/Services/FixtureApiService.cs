@@ -50,7 +50,7 @@ public class FixtureApiService : IFixtureApiService
     }
 
     public async Task<IEnumerable<OrganisationModel>> GetOrganisationsForCompetitionAsync(
-        int competitionId
+        long competitionId
     )
     {
         var getOrganisationsUri = new Uri(
@@ -67,7 +67,7 @@ public class FixtureApiService : IFixtureApiService
     }
 
     public async Task<GetFixturesResponseModel> GetFixturesForCompetitionAsync(
-        int competitionId,
+        long competitionId,
         IEnumerable<int> organisationIds
     )
     {

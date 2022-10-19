@@ -7,51 +7,36 @@ namespace FootballSubscriber.Core.Entities;
 public class Fixture : IApiEntity
 {
     /// <summary>
-    ///     Local unique identifier
+    /// Local unique identifier
     /// </summary>
     public int? Id { get; set; }
 
     /// <summary>
-    ///     Third party unique identifier
+    /// Third party unique identifier
     /// </summary>
     [JsonIgnore]
     public long ApiId { get; set; }
 
-    /// <summary>
-    ///     Set on save
-    /// </summary>
+    public int CompetitionId { get; set; }
     [JsonIgnore]
     public long CompetitionApiId { get; set; }
 
-    public int HomeTeamId { get; set; }
-
-    [JsonIgnore]
-    public long HomeTeamApiId { get; set; }
-    public string HomeTeamName { get; set; }
-
-    [JsonIgnore]
-    public Team HomeTeam { get; set; }
-    public int HomeOrganisationId { get; set; }
-    public string HomeOrganisationLogo { get; set; }
-
-    public int AwayTeamId { get; set; }
-
-    [JsonIgnore]
-    public long AwayTeamApiId { get; set; }
-
-    [JsonIgnore]
-    public Team AwayTeam { get; set; }
-    public string AwayTeamName { get; set; }
-    public int AwayOrganisationId { get; set; }
-    public string AwayOrganisationLogo { get; set; }
-
-    public DateTime Date { get; set; }
-    public int VenueId { get; set; }
-    public string VenueName { get; set; }
-    public string Address { get; set; }
-
-    public int CompetitionId { get; set; }
-
     [JsonIgnore]
     public Competition Competition { get; set; }
+
+    public string HomeTeamName { get; set; }
+    public string HomeOrganisationLogo { get; set; }
+    public int? HomeScore { get; set; }
+
+    public string AwayTeamName { get; set; }
+    public string AwayOrganisationLogo { get; set; }
+    public int? AwayScore { get; set; }
+
+    public DateTime Date { get; set; }
+    public string Status { get; set; }
+    
+    public string VenueName { get; set; }
+    public string Address { get; set; }
+    public decimal? Longitude { get; set; }
+    public decimal? Latitude { get; set; }
 }

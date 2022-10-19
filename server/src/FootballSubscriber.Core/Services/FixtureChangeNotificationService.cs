@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FootballSubscriber.Core.Entities;
@@ -32,7 +31,7 @@ public class FixtureChangeNotificationService : IFixtureChangeNotificationServic
     {
         var subscriptions = (
             await _subscriptionRepository.FindAsync(
-                s => s.TeamId == oldFixture.HomeTeamId || s.TeamId == oldFixture.AwayTeamId,
+                s => s.TeamName == oldFixture.HomeTeamName || s.TeamName == oldFixture.AwayTeamName,
                 s => s.Id
             )
         ).ToList();

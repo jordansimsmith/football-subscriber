@@ -24,12 +24,18 @@ public class SubscriptionService : ISubscriptionService
         _logger = logger;
     }
 
-    public async Task<Subscription> CreateSubscriptionAsync(int teamId, string userId)
+    public async Task<Subscription> CreateSubscriptionAsync(string teamName, string userId)
     {
-        if (await _subscriptionRepository.AnyAsync(s => s.TeamId == teamId && s.UserId == userId))
+        if (
+            await _subscriptionRepository.AnyAsync(
+                s => s.TeamName == teamName && s.UserId == userId
+            )
+        )
+        {
             throw new ConflictException("A subscription already exists for this team");
+        }
 
-        var subscription = new Subscription { TeamId = teamId, UserId = userId };
+        var subscription = new Subscription { TeamName = teamName, UserId = userId };
 
         try
         {
@@ -49,11 +55,7 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task<IEnumerable<Subscription>> GetSubscriptionsAsync(string userId)
     {
-        return await _subscriptionRepository.FindAsync(
-            s => s.UserId == userId,
-            s => s.Id,
-            s => s.Team
-        );
+        return await _subscriptionRepository.FindAsync(s => s.UserId == userId, s => s.Id);
     }
 
     public async Task DeleteSubscriptionAsync(int subscriptionId, string userId)
@@ -64,8 +66,11 @@ public class SubscriptionService : ISubscriptionService
                 s => s.Id
             )
         ).FirstOrDefault();
+        
         if (subscription == null)
+        {
             throw new NotFoundException("The subscription could not be found");
+        }
 
         _subscriptionRepository.Remove(subscription);
         await _subscriptionRepository.SaveChangesAsync();
