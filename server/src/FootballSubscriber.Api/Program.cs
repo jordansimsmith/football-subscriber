@@ -150,6 +150,6 @@ app.UseEndpoints(endpoints =>
 GlobalJobFilters.Filters.Add(
     new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Fail }
 );
-RecurringJob.AddOrUpdate<IRefreshFixtureService>(x => x.RefreshFixturesAsync(), "*/15 * * * *");
+RecurringJob.AddOrUpdate<IRefreshFixtureService>(x => x.RefreshFixturesAsync(), Cron.Hourly);
 
 app.Run();
