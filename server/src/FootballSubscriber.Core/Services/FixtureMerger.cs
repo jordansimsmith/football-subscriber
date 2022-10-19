@@ -52,7 +52,7 @@ public class FixtureMerger : MergerBase<Fixture>
         oldFixture.AwayOrganisationId = newFixture.AwayOrganisationId;
         oldFixture.AwayOrganisationLogo = newFixture.AwayOrganisationLogo;
 
-        oldFixture.Date = newFixture.Date.ToUniversalTime();
+        oldFixture.Date = newFixture.Date;
         oldFixture.VenueId = newFixture.VenueId;
         oldFixture.VenueName = newFixture.VenueName;
         oldFixture.Address = newFixture.Address;

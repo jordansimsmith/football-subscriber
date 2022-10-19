@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,6 +114,16 @@ public class RefreshFixtureService : IRefreshFixtureService
                 fixture.Competition = localCompetitions.First(c => c.ApiId == competitionId);
                 fixture.HomeTeamName ??= "Unknown";
                 fixture.AwayTeamName ??= "Unknown";
+
+                // date from api is NZST but does not have any TZ info attached
+                // we want to handle and store the dates in UTC on the server, and let the client convert back when retreiving
+                var dateUnspecifiedKind = DateTime.SpecifyKind(f.Date, DateTimeKind.Unspecified);
+                var nzTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(
+                    "New Zealand Standard Time"
+                );
+                var utcDate = TimeZoneInfo.ConvertTimeToUtc(dateUnspecifiedKind, nzTimeZoneInfo);
+                fixture.Date = utcDate;
+
                 return fixture;
             })
             .ToList();
