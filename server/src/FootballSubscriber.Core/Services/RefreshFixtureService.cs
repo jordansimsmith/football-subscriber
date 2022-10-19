@@ -112,8 +112,6 @@ public class RefreshFixtureService : IRefreshFixtureService
                 var fixture = _mapper.Map<FixtureModel, Fixture>(f);
                 fixture.CompetitionApiId = competitionId;
                 fixture.Competition = localCompetitions.First(c => c.ApiId == competitionId);
-                fixture.HomeTeamName ??= "Unknown";
-                fixture.AwayTeamName ??= "Unknown";
 
                 // date from api is NZST but does not have any TZ info attached
                 // we want to handle and store the dates in UTC on the server, and let the client convert back when retreiving
