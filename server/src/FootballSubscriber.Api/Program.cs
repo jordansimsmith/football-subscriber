@@ -149,7 +149,7 @@ app.UseEndpoints(endpoints =>
 });
 
 GlobalJobFilters.Filters.Add(
-    new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Fail }
+    new AutomaticRetryAttribute { Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete }
 );
 RecurringJob.AddOrUpdate<IRefreshFixtureService>(x => x.RefreshFixturesAsync(), Cron.Hourly);
 
