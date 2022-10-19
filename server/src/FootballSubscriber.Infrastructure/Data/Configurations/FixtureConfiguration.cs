@@ -10,7 +10,7 @@ public class FixtureConfiguration : IEntityTypeConfiguration<Fixture>
     {
         builder.HasKey(o => o.Id);
         builder.HasIndex(o => o.ApiId).IsUnique();
-        
+
         builder.Property(o => o.CompetitionApiId).IsRequired();
 
         builder.Property(o => o.HomeTeamName).IsRequired();

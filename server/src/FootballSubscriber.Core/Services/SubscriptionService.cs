@@ -66,7 +66,7 @@ public class SubscriptionService : ISubscriptionService
                 s => s.Id
             )
         ).FirstOrDefault();
-        
+
         if (subscription == null)
         {
             throw new NotFoundException("The subscription could not be found");

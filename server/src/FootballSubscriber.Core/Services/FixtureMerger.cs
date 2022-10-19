@@ -47,7 +47,7 @@ public class FixtureMerger : MergerBase<Fixture>
 
         oldFixture.Date = newFixture.Date;
         oldFixture.Status = newFixture.Status;
-        
+
         oldFixture.VenueName = newFixture.VenueName;
         oldFixture.Address = newFixture.Address;
         oldFixture.Longitude = newFixture.Longitude;

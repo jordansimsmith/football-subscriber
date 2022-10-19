@@ -19,9 +19,9 @@ public class TeamService : ITeamService
     public async Task<IEnumerable<TeamModel>> GetTeamsAsync()
     {
         return (await _fixtureRepository.FindAsync(f => true, f => f.Id))
-            .SelectMany(f => new[] {f.HomeTeamName, f.AwayTeamName})
+            .SelectMany(f => new[] { f.HomeTeamName, f.AwayTeamName })
             .Distinct()
-            .Select(x => new TeamModel {Name = x})
+            .Select(x => new TeamModel { Name = x })
             .ToArray();
     }
 }

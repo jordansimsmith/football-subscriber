@@ -18,6 +18,7 @@ public class Fixture : IApiEntity
     public long ApiId { get; set; }
 
     public int CompetitionId { get; set; }
+
     [JsonIgnore]
     public long CompetitionApiId { get; set; }
 
@@ -34,7 +35,7 @@ public class Fixture : IApiEntity
 
     public DateTime Date { get; set; }
     public string Status { get; set; }
-    
+
     public string VenueName { get; set; }
     public string Address { get; set; }
     public decimal? Longitude { get; set; }
