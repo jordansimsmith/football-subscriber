@@ -87,7 +87,7 @@ public class RefreshFixtureServiceTest
             }
         };
         _mockFixtureApiService
-            .Setup(x => x.GetOrganisationsForCompetitionAsync(It.IsAny<int>()))
+            .Setup(x => x.GetOrganisationsForCompetitionAsync(It.IsAny<long>()))
             .ReturnsAsync(organisationModels)
             .Verifiable();
 
@@ -123,7 +123,8 @@ public class RefreshFixtureServiceTest
         };
         _mockFixtureApiService
             .Setup(
-                x => x.GetFixturesForCompetitionAsync(It.IsAny<int>(), It.IsAny<IEnumerable<int>>())
+                x =>
+                    x.GetFixturesForCompetitionAsync(It.IsAny<long>(), It.IsAny<IEnumerable<int>>())
             )
             .ReturnsAsync(fixtures)
             .Verifiable();
