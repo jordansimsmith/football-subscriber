@@ -1,12 +1,9 @@
 using System;
+using System.Reflection;
 using System.Security.Claims;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using AutoMapper.Contrib.Autofac.DependencyInjection;
 using FootballSubscriber.Api.Filters;
 using FootballSubscriber.Core;
 using FootballSubscriber.Core.Interfaces;
-using FootballSubscriber.Core.Mappers;
 using FootballSubscriber.Infrastructure;
 using FootballSubscriber.Infrastructure.Data;
 using FootballSubscriber.Infrastructure.Services;
@@ -22,17 +19,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
-builder.Host.ConfigureContainer<ContainerBuilder>(
-    (_, containerBuilder) =>
-    {
-        containerBuilder.RegisterModule<CoreModule>();
-        containerBuilder.RegisterModule<InfrastructureModule>();
-        containerBuilder.RegisterAutoMapper(typeof(FixtureProfile).Assembly);
-    }
-);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
@@ -89,6 +75,9 @@ builder.Services
     });
 
 builder.Services.AddHttpClient<IFixtureApiService, FixtureApiService>();
+
+builder.Services.AddCoreServices();
+builder.Services.AddInfrastructureServices();
 
 builder.Services.AddDbContext(builder.Configuration.GetConnectionString("FootballSubscriber"));
 builder.Services.AddHangfireContext(builder.Configuration.GetConnectionString("Hangfire"));
