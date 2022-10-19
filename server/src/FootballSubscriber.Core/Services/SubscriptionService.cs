@@ -40,7 +40,7 @@ public class SubscriptionService : ISubscriptionService
         }
         catch (Exception e)
         {
-            _logger.LogError(e.Message);
+            _logger.LogError(e, "An error was encountered when creating the subscription");
             throw new InternalServerErrorException(
                 "An error was encountered when creating the subscription"
             );

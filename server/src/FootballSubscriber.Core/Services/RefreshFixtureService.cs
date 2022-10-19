@@ -93,7 +93,7 @@ public class RefreshFixtureService : IRefreshFixtureService
         ConcurrentDictionary<int, IList<Fixture>> newFixtures
     )
     {
-        _logger.LogInformation($"Processing competition {competition.Name}");
+        _logger.LogInformation("Processing competition {competition.Name}", competition.Name);
 
         // get organisations for the competition from the API
         var competitionId = int.Parse(competition.Id);

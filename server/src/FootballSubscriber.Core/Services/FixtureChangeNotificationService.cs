@@ -39,7 +39,8 @@ public class FixtureChangeNotificationService : IFixtureChangeNotificationServic
         if (!subscriptions.Any())
         {
             _logger.LogInformation(
-                $"Fixture {newFixture.Id} changed but there were no subscribers to listen to it"
+                "Fixture {newFixture.Id} changed but there were no subscribers to listen to it",
+                newFixture.Id
             );
             return;
         }
