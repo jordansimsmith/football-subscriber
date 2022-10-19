@@ -113,6 +113,8 @@ public class RefreshFixtureService : IRefreshFixtureService
                 var fixture = _mapper.Map<FixtureModel, Fixture>(f);
                 fixture.CompetitionApiId = competitionId;
                 fixture.Competition = localCompetitions.First(c => c.ApiId == competitionId);
+                fixture.HomeTeamName ??= "Unknown";
+                fixture.AwayTeamName ??= "Unknown";
                 return fixture;
             })
             .ToList();
