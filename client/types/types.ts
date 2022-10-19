@@ -21,7 +21,6 @@ export interface IFixture {
 }
 
 export interface ITeam {
-  id: number;
   name: string;
 }
 

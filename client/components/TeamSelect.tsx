@@ -25,13 +25,14 @@ export const TeamSelect = ({
       return [];
     }
 
-    return data.map((o) => ({
-      value: o.id,
+    return data.map((o, i) => ({
+      value: i,
       label: o.name,
     }));
   }, [data]);
 
   const theme = useTheme();
+
   return (
     <Select
       placeholder="Select a team"

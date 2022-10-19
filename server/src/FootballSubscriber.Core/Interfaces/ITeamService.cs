@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FootballSubscriber.Core.Entities;
+using FootballSubscriber.Core.Models;
 
 namespace FootballSubscriber.Core.Interfaces;
 
@@ -10,5 +10,5 @@ public interface ITeamService
     ///     Gets the list of teams
     /// </summary>
     /// <returns></returns>
-    Task<IEnumerable<string>> GetTeamsAsync();
+    Task<IEnumerable<TeamModel>> GetTeamsAsync();
 }

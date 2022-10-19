@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FootballSubscriber.Core.Entities;
 using FootballSubscriber.Core.Interfaces;
+using FootballSubscriber.Core.Models;
 
 namespace FootballSubscriber.Core.Services;
 
@@ -15,11 +16,12 @@ public class TeamService : ITeamService
         _fixtureRepository = fixtureRepository;
     }
 
-    public async Task<IEnumerable<string>> GetTeamsAsync()
+    public async Task<IEnumerable<TeamModel>> GetTeamsAsync()
     {
         return (await _fixtureRepository.FindAsync(f => true, f => f.Id))
-            .SelectMany(f => new[] { f.HomeTeamName, f.AwayTeamName })
+            .SelectMany(f => new[] {f.HomeTeamName, f.AwayTeamName})
             .Distinct()
+            .Select(x => new TeamModel {Name = x})
             .ToArray();
     }
 }

@@ -18,7 +18,7 @@ export const SubscriptionForm = (): JSX.Element => {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError, isSuccess } = useMutation(
-    async (teamId: number) => {
+    async (teamName: string) => {
       const accessToken = await getAccessToken();
 
       const url = `${process.env.NEXT_PUBLIC_SERVER_BASE}/subscriptions`;
@@ -28,7 +28,7 @@ export const SubscriptionForm = (): JSX.Element => {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ teamId }),
+        body: JSON.stringify({ teamName }),
       });
       if (!res.ok) {
         throw new Error(await res.text());
@@ -69,7 +69,7 @@ export const SubscriptionForm = (): JSX.Element => {
         variant="solid"
         disabled={!team}
         isLoading={isLoading}
-        onClick={() => mutate(team.value)}
+        onClick={() => mutate(team.label)}
         display="block"
       >
         Submit

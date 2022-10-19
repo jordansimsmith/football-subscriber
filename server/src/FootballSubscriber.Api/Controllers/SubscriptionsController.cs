@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using FootballSubscriber.Core.Exceptions;
 using FootballSubscriber.Core.Interfaces;
 using FootballSubscriber.Core.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -22,12 +23,19 @@ public class SubscriptionsController : ControllerBase
     [HttpPost("")]
     public async Task<ActionResult> CreateSubscriptionAsync(SubscriptionModel subscriptionModel)
     {
-        var subscription = await _subscriptionService.CreateSubscriptionAsync(
-            subscriptionModel.TeamName,
-            User.Identity?.Name
-        );
-        var location = new Uri($"/subscriptions/{subscription.Id}");
-        return Created(location, subscription);
+        try
+        {
+            var subscription = await _subscriptionService.CreateSubscriptionAsync(
+                subscriptionModel.TeamName,
+                User.Identity?.Name
+            );
+            var location = new Uri($"/subscriptions/{subscription.Id}");
+            return Created(location, subscription);
+        }
+        catch (ConflictException)
+        {
+            return Conflict();
+        }
     }
 
     [HttpGet("")]
