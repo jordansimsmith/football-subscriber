@@ -1,6 +1,6 @@
 using System;
-using System.Reflection;
 using System.Security.Claims;
+using FootballSubscriber.Api;
 using FootballSubscriber.Api.Filters;
 using FootballSubscriber.Core;
 using FootballSubscriber.Core.Interfaces;
@@ -15,10 +15,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddOpenTelemetryLogging(
+    builder.Environment,
+    builder.Configuration["OpenTelemetry:Endpoint"]
+);
+
+builder.Services.AddOpenTelemetryTracing(
+    builder.Environment,
+    builder.Configuration["OpenTelemetry:Endpoint"]
+);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
